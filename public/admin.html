@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Forge 内部诊断后台</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    body { background: #191614; color: #fff1dc; }
+    .admin-shell { min-height: 100vh; padding: 28px; }
+    .admin-top { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 22px; }
+    .admin-top h1 { font-size: clamp(30px, 5vw, 64px); margin: 0; color: #fff1dc; }
+    .admin-top p { color: rgba(255, 241, 220, .68); line-height: 1.6; max-width: 680px; }
+    .login-box, .admin-panel { border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); padding: clamp(18px, 3vw, 28px); box-shadow: 0 24px 70px rgba(0,0,0,.28); }
+    .login-box { max-width: 520px; margin-top: 28px; }
+    .admin-input { width: 100%; min-height: 48px; padding: 0 14px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.08); color: #fff1dc; border-radius: 8px; margin: 8px 0 14px; }
+    .admin-grid { display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 16px; }
+    .sub-list { display: grid; gap: 10px; max-height: 72vh; overflow: auto; padding-right: 4px; }
+    .sub-item { text-align: left; width: 100%; border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); color: #fff1dc; padding: 14px; border-radius: 8px; }
+    .sub-item.active { border-color: #e25d2f; box-shadow: inset 4px 0 0 #e25d2f; }
+    .sub-item strong { display: block; margin-bottom: 5px; }
+    .sub-item span { color: rgba(255,241,220,.64); font-size: 13px; }
+    .detail-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
+    .detail-card { border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05); padding: 14px; border-radius: 8px; }
+    .detail-card strong { display: block; font-size: 30px; }
+    .detail-card span, .muted-admin { color: rgba(255,241,220,.66); }
+    .wide { grid-column: 1 / -1; }
+    pre { white-space: pre-wrap; color: rgba(255,241,220,.72); font-size: 12px; line-height: 1.5; }
+    @media (max-width: 980px) { .admin-grid, .detail-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="admin-shell">
+    <div class="admin-top">
+      <div>
+        <div class="eyebrow">Forge internal only</div>
+        <h1>内部诊断后台</h1>
+        <p>用于查看学员 AI 实用力探索数据、真实拥抱情况、未来拥抱深度、风险稳健度和带教建议。此页不面向学员公开。</p>
+      </div>
+      <button class="ghost-btn" onclick="logout()">退出</button>
+    </div>
+
+    <section id="login" class="login-box">
+      <h2>内部口令</h2>
+      <p class="muted-admin">请输入部署时配置的 ADMIN_PASSWORD。原型默认口令为 ForgeInternal2026!，上线务必修改。</p>
+      <input id="password" class="admin-input" type="password" placeholder="内部口令" />
+      <button class="primary-btn" onclick="login()">进入后台</button>
+      <p id="loginMsg" class="muted-admin"></p>
+    </section>
+
+    <section id="dashboard" class="admin-grid" style="display:none">
+      <div class="admin-panel">
+        <h2>学员记录</h2>
+        <p id="count" class="muted-admin"></p>
+        <div id="list" class="sub-list"></div>
+      </div>
+      <div class="admin-panel">
+        <h2 id="detailTitle">选择一位学员</h2>
+        <div id="detail"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let submissions = [];
+    let selectedId = "";
+
+    async function login() {
+      const password = document.querySelector("#password").value;
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password })
+      });
+      if (!res.ok) {
+        document.querySelector("#loginMsg").textContent = "口令不正确。";
+        return;
+      }
+      await load();
+    }
+
+    async function logout() {
+      await fetch("/api/admin/logout", { method: "POST" });
+      document.querySelector("#dashboard").style.display = "none";
+      document.querySelector("#login").style.display = "block";
+    }
+
+    async function load() {
+      const res = await fetch("/api/admin/submissions");
+      if (!res.ok) {
+        document.querySelector("#login").style.display = "block";
+        document.querySelector("#dashboard").style.display = "none";
+        return;
+      }
+      submissions = (await res.json()).submissions || [];
+      document.querySelector("#login").style.display = "none";
+      document.querySelector("#dashboard").style.display = "grid";
+      renderList();
+      if (submissions[0]) select(submissions[0].id);
+    }
+
+    function renderList() {
+      document.querySelector("#count").textContent = `共 ${submissions.length} 条记录`;
+      document.querySelector("#list").innerHTML = submissions.map(item => {
+        const bg = item.bg || {};
+        const persona = item.report?.persona?.name || "未生成画像";
+        return `<button class="sub-item ${item.id === selectedId ? "active" : ""}" onclick="select('${item.id}')">
+          <strong>${escapeHtml(bg.name || "匿名学员")} · ${escapeHtml(persona)}</strong>
+          <span>${escapeHtml(bg.identity || "未填写身份")} / ${escapeHtml(bg.goal || "未填写目标")}</span><br>
+          <span>${new Date(item.createdAt).toLocaleString()}</span>
+        </button>`;
+      }).join("");
+    }
+
+    function select(id) {
+      selectedId = id;
+      renderList();
+      const item = submissions.find(x => x.id === id);
+      if (!item) return;
+      const bg = item.bg || {};
+      const report = item.report || {};
+      const indices = report.indices || [];
+      document.querySelector("#detailTitle").textContent = `${bg.name || "匿名学员"} · ${report.persona?.name || "画像未生成"}`;
+      document.querySelector("#detail").innerHTML = `
+        <div class="detail-grid">
+          ${indices.map(x => `<div class="detail-card"><strong>${x.value}</strong><span>${escapeHtml(x.label)}</span></div>`).join("")}
+          <div class="detail-card wide"><h3>基础信息</h3><p class="muted-admin">${escapeHtml(bg.identity || "-")} / ${escapeHtml(bg.goal || "-")} / ${escapeHtml(bg.task || "-")} / ${escapeHtml(bg.frequency || "-")} / 顾虑：${escapeHtml(bg.concern || "-")}</p></div>
+          <div class="detail-card wide"><h3>真实拥抱情况</h3><p class="muted-admin">${escapeHtml(report.embraceType || "-")}</p></div>
+          <div class="detail-card wide"><h3>未来拥抱深度</h3><p class="muted-admin">${escapeHtml(report.depthType || "-")}</p></div>
+          <div class="detail-card wide"><h3>四象限带教分层</h3><p class="muted-admin">${escapeHtml(report.quadrant || "-")}</p></div>
+          <div class="detail-card wide"><h3>班主任建议</h3><p class="muted-admin">${escapeHtml(report.coach || "-")}</p></div>
+          <div class="detail-card wide"><h3>原始记录</h3><pre>${escapeHtml(JSON.stringify(item, null, 2))}</pre></div>
+        </div>`;
+    }
+
+    function escapeHtml(text) {
+      return String(text).replace(/[&<>"']/g, s => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[s]));
+    }
+
+    load();
+  </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "forge-ai-explorer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Forge AI 锻造训战营 AI 实用力探索站，含内部诊断后台。",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "generate:poster": "node scripts/generate-poster.js"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
