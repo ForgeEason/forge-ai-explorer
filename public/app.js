@@ -740,12 +740,11 @@ async function submitCurrentReport() {
           "apikey": supabase.anonKey,
           "Authorization": `Bearer ${supabase.anonKey}`,
           "Content-Type": "application/json",
-          "Prefer": "return=representation"
+          "Prefer": "return=minimal"
         },
         body: JSON.stringify(payload)
       });
-      const result = await response.json();
-      state.submissionId = result?.[0]?.id || "";
+      state.submissionId = response.ok ? "submitted" : "";
     } else {
       const response = await fetch("/api/submissions", {
         method: "POST",
