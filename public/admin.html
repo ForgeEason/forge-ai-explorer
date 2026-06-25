@@ -42,8 +42,9 @@
 
     <section id="login" class="login-box">
       <h2>内部口令</h2>
-      <p class="muted-admin">请输入部署时配置的 ADMIN_PASSWORD。原型默认口令为 ForgeInternal2026!，上线务必修改。</p>
-      <input id="password" class="admin-input" type="password" placeholder="内部口令" />
+      <p class="muted-admin">请输入 Forge 内部管理员邮箱与密码。后台数据由 Supabase 登录保护，未登录不可读取。</p>
+      <input id="email" class="admin-input" type="email" placeholder="管理员邮箱" />
+      <input id="password" class="admin-input" type="password" placeholder="管理员密码" />
       <button class="primary-btn" onclick="login()">进入后台</button>
       <p id="loginMsg" class="muted-admin"></p>
     </section>
@@ -61,38 +62,71 @@
     </section>
   </main>
 
+  <script src="./config.js"></script>
   <script>
     let submissions = [];
     let selectedId = "";
+    let accessToken = sessionStorage.getItem("forge_supabase_token") || "";
+
+    function supabaseReady() {
+      return Boolean(window.FORGE_SUPABASE?.url && window.FORGE_SUPABASE?.anonKey);
+    }
+
+    function supabaseHeaders(token = accessToken) {
+      return {
+        "apikey": window.FORGE_SUPABASE.anonKey,
+        "Authorization": `Bearer ${token || window.FORGE_SUPABASE.anonKey}`,
+        "Content-Type": "application/json"
+      };
+    }
 
     async function login() {
-      const password = document.querySelector("#password").value;
-      const res = await fetch("/api/admin/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password })
-      });
-      if (!res.ok) {
-        document.querySelector("#loginMsg").textContent = "口令不正确。";
+      if (!supabaseReady()) {
+        document.querySelector("#loginMsg").textContent = "请先在 config.js 中配置 Supabase URL 和 anon key。";
         return;
       }
+      const email = document.querySelector("#email").value.trim();
+      const password = document.querySelector("#password").value;
+      const res = await fetch(`${window.FORGE_SUPABASE.url}/auth/v1/token?grant_type=password`, {
+        method: "POST",
+        headers: {
+          "apikey": window.FORGE_SUPABASE.anonKey,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      });
+      if (!res.ok) {
+        document.querySelector("#loginMsg").textContent = "邮箱或密码不正确，或该账号未创建。";
+        return;
+      }
+      const data = await res.json();
+      accessToken = data.access_token;
+      sessionStorage.setItem("forge_supabase_token", accessToken);
       await load();
     }
 
     async function logout() {
-      await fetch("/api/admin/logout", { method: "POST" });
+      accessToken = "";
+      sessionStorage.removeItem("forge_supabase_token");
       document.querySelector("#dashboard").style.display = "none";
       document.querySelector("#login").style.display = "block";
     }
 
     async function load() {
-      const res = await fetch("/api/admin/submissions");
+      if (!supabaseReady() || !accessToken) {
+        document.querySelector("#login").style.display = "block";
+        document.querySelector("#dashboard").style.display = "none";
+        return;
+      }
+      const res = await fetch(`${window.FORGE_SUPABASE.url}/rest/v1/submissions?select=*&order=created_at.desc`, {
+        headers: supabaseHeaders()
+      });
       if (!res.ok) {
         document.querySelector("#login").style.display = "block";
         document.querySelector("#dashboard").style.display = "none";
         return;
       }
-      submissions = (await res.json()).submissions || [];
+      submissions = await res.json();
       document.querySelector("#login").style.display = "none";
       document.querySelector("#dashboard").style.display = "grid";
       renderList();
@@ -107,7 +141,7 @@
         return `<button class="sub-item ${item.id === selectedId ? "active" : ""}" onclick="select('${item.id}')">
           <strong>${escapeHtml(bg.name || "匿名学员")} · ${escapeHtml(persona)}</strong>
           <span>${escapeHtml(bg.identity || "未填写身份")} / ${escapeHtml(bg.goal || "未填写目标")}</span><br>
-          <span>${new Date(item.createdAt).toLocaleString()}</span>
+          <span>${new Date(item.created_at || item.createdAt).toLocaleString()}</span>
         </button>`;
       }).join("");
     }

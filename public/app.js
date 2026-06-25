@@ -726,17 +726,35 @@ async function submitCurrentReport() {
   state.submitted = true;
   try {
     const report = buildReport();
-    const response = await fetch("/api/submissions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        bg: state.bg,
-        answers: state.answers,
-        report
-      })
-    });
-    const result = await response.json();
-    state.submissionId = result.id || "";
+    const payload = {
+      bg: state.bg,
+      answers: state.answers,
+      report,
+      user_agent: navigator.userAgent
+    };
+    const supabase = window.FORGE_SUPABASE || {};
+    if (supabase.url && supabase.anonKey) {
+      const response = await fetch(`${supabase.url}/rest/v1/submissions`, {
+        method: "POST",
+        headers: {
+          "apikey": supabase.anonKey,
+          "Authorization": `Bearer ${supabase.anonKey}`,
+          "Content-Type": "application/json",
+          "Prefer": "return=representation"
+        },
+        body: JSON.stringify(payload)
+      });
+      const result = await response.json();
+      state.submissionId = result?.[0]?.id || "";
+    } else {
+      const response = await fetch("/api/submissions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const result = await response.json();
+      state.submissionId = result.id || "";
+    }
   } catch (error) {
     console.warn("submission failed", error);
   }
