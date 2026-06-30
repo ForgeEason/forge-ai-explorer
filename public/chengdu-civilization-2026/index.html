@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#06111f" />
+  <title>成都父子7天6晚·中国少年文明探索之旅</title>
+  <style>
+    :root{
+      --bg:#050b16;--panel:#0b1728;--card:#0f2137;--card2:#122b48;--text:#f4f7fb;--muted:#a9bbd1;
+      --gold:#ffd166;--blue:#4cc9f0;--cyan:#72efdd;--red:#ff6b6b;--green:#80ed99;--line:rgba(255,255,255,.12);
+      --shadow:0 18px 60px rgba(0,0,0,.35);--radius:22px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;background:
+      radial-gradient(circle at 12% 8%,rgba(76,201,240,.22),transparent 28%),
+      radial-gradient(circle at 84% 4%,rgba(255,209,102,.17),transparent 24%),
+      radial-gradient(circle at 60% 80%,rgba(114,239,221,.12),transparent 28%),
+      linear-gradient(180deg,#030814 0%,#06111f 44%,#081426 100%);color:var(--text);line-height:1.65;overflow-x:hidden}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.35;background-image:
+      radial-gradient(#fff 1px,transparent 1px),radial-gradient(#72efdd 1px,transparent 1px);background-size:42px 42px,88px 88px;background-position:0 0,18px 28px;mask-image:linear-gradient(#000,transparent 80%)}
+    a{color:inherit;text-decoration:none}
+    .progressbar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--blue),var(--gold));z-index:50;box-shadow:0 0 18px var(--blue)}
+    .nav{position:sticky;top:0;z-index:40;padding:10px 12px;background:rgba(5,11,22,.76);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+    .nav a{display:inline-flex;align-items:center;gap:6px;margin:0 5px;padding:8px 11px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.05);font-size:13px;color:#dfeaff}
+    .wrap{width:min(1120px,100%);margin:auto;padding:18px 14px 56px}
+    .hero{position:relative;min-height:72vh;display:grid;align-items:center;padding:44px 18px 24px;border:1px solid rgba(255,255,255,.12);border-radius:32px;background:
+      linear-gradient(135deg,rgba(10,28,49,.92),rgba(5,11,22,.82)),radial-gradient(circle at 80% 25%,rgba(255,209,102,.18),transparent 30%);box-shadow:var(--shadow);overflow:hidden}
+    .hero:after{content:"✦  ✈  ✦  蜀  ✦  航  ✦  江  ✦";position:absolute;right:-30px;top:54px;transform:rotate(18deg);font-size:28px;letter-spacing:16px;color:rgba(114,239,221,.16);white-space:nowrap}
+    .eyebrow{color:var(--cyan);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:13px}
+    h1{font-size:clamp(34px,7vw,72px);line-height:1.05;margin:12px 0 12px;letter-spacing:-.04em}
+    .grad{background:linear-gradient(90deg,#fff,var(--gold),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .lead{font-size:clamp(17px,3vw,24px);color:#d8e6f7;margin:0 0 16px}
+    .quote{border-left:4px solid var(--gold);padding:10px 14px;background:rgba(255,209,102,.08);border-radius:0 16px 16px 0;color:#fff4cf;font-weight:700}
+    .tags{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+    .tag{padding:7px 10px;border-radius:999px;background:rgba(76,201,240,.1);border:1px solid rgba(76,201,240,.22);color:#d9f8ff;font-size:13px}
+    .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .btn{border:0;border-radius:999px;padding:11px 14px;background:linear-gradient(135deg,var(--blue),#3a86ff);color:#03101c;font-weight:900;box-shadow:0 10px 28px rgba(76,201,240,.22);cursor:pointer}
+    .btn.alt{background:rgba(255,255,255,.07);color:var(--text);border:1px solid var(--line);box-shadow:none}
+    section{margin-top:18px}
+    .panel,.day,.mini{background:linear-gradient(180deg,rgba(15,33,55,.92),rgba(9,20,35,.92));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .panel{padding:18px}
+    h2{font-size:26px;margin:0 0 10px}
+    h3{font-size:20px;margin:0 0 8px}
+    .muted{color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
+    .col-4{grid-column:span 4}.col-6{grid-column:span 6}.col-8{grid-column:span 8}.col-12{grid-column:span 12}
+    .stat{padding:14px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.045)}
+    .stat b{display:block;font-size:24px;color:var(--gold)}
+    .badgebox{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:12px}
+    .badge{min-height:88px;border-radius:18px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);display:grid;place-items:center;text-align:center;padding:8px;filter:grayscale(1);opacity:.58;transition:.25s}
+    .badge.done{filter:none;opacity:1;background:linear-gradient(160deg,rgba(255,209,102,.2),rgba(76,201,240,.14));box-shadow:0 0 24px rgba(255,209,102,.16)}
+    .badge span{font-size:28px;display:block}
+    .timeline{display:grid;gap:12px}
+    .day{overflow:hidden}
+    .dayhead{width:100%;display:flex;gap:12px;align-items:center;justify-content:space-between;padding:16px;background:rgba(255,255,255,.035);border:0;color:var(--text);text-align:left;cursor:pointer}
+    .daynum{min-width:58px;height:58px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold),#f77f00);color:#181008;font-weight:1000}
+    .daytitle{flex:1}.daytitle h3{margin:0}.chev{font-size:22px;color:var(--gold)}
+    .daybody{display:none;padding:16px;border-top:1px solid var(--line)}
+    .day.open .daybody{display:block}.day.open .chev{transform:rotate(180deg)}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+    .chip{font-size:12px;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:5px 8px;color:#dce8f7;background:rgba(255,255,255,.04)}
+    .subgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    .box{padding:13px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.045)}
+    .box.gold{background:rgba(255,209,102,.08);border-color:rgba(255,209,102,.24)}
+    .box.blue{background:rgba(76,201,240,.08);border-color:rgba(76,201,240,.22)}
+    .box.green{background:rgba(128,237,153,.08);border-color:rgba(128,237,153,.2)}
+    ul{padding-left:20px;margin:8px 0} li{margin:5px 0}
+    .schedule{display:grid;gap:8px}.slot{display:grid;grid-template-columns:86px 1fr;gap:10px;padding:9px 0;border-bottom:1px dashed rgba(255,255,255,.12)}.slot:last-child{border-bottom:0}
+    .time{color:var(--cyan);font-weight:800}
+    .mapbtn{display:inline-flex;margin:5px 6px 0 0;padding:8px 10px;border-radius:999px;border:1px solid rgba(114,239,221,.26);background:rgba(114,239,221,.08);color:#dffdfa;font-size:13px}
+    .meal{display:grid;gap:8px}.mealrow{padding:9px;border:1px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(255,255,255,.035)}
+    .check-controls{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+    .cat{margin-top:10px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:rgba(255,255,255,.035)}
+    .cat button{width:100%;border:0;background:rgba(255,255,255,.05);color:var(--text);padding:12px 14px;text-align:left;font-weight:900;display:flex;justify-content:space-between}
+    .catitems{display:none;padding:10px 14px}.cat.open .catitems{display:block}
+    label.item{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.1)}
+    label.item:last-child{border-bottom:0} input[type=checkbox]{width:20px;height:20px;accent-color:#4cc9f0;flex:0 0 auto;margin-top:3px}
+    label.item.checked{opacity:.58;text-decoration:line-through}
+    .calc{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .range{padding:12px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.04)}
+    .range input{width:100%}.money{font-size:34px;color:var(--gold);font-weight:1000}
+    .certificate{display:none;padding:18px;border:1px solid rgba(255,209,102,.38);border-radius:24px;background:linear-gradient(135deg,rgba(255,209,102,.18),rgba(76,201,240,.12));text-align:center}
+    .certificate.show{display:block}
+    .footerq{display:grid;gap:10px}
+    .float{position:fixed;right:14px;bottom:14px;z-index:30;display:grid;gap:8px}.float button{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:rgba(8,20,38,.92);color:var(--gold);box-shadow:var(--shadow)}
+    @media (max-width:760px){
+      .wrap{padding:12px 10px 52px}.hero{border-radius:24px;padding:34px 14px 20px}.grid,.subgrid,.calc{grid-template-columns:1fr}.col-4,.col-6,.col-8,.col-12{grid-column:span 1}.badgebox{grid-template-columns:repeat(3,1fr)}
+      .slot{grid-template-columns:72px 1fr}.dayhead{padding:13px}.daynum{min-width:48px;height:48px}.nav a{font-size:12px;padding:7px 9px}
+    }
+    @media print{.nav,.float,.progressbar,.btn,.mapbtn{display:none}body{background:#fff;color:#111}.panel,.day,.mini{box-shadow:none;border-color:#ddd;background:#fff}.daybody{display:block}}
+  </style>
+</head>
+<body>
+  <div class="progressbar" id="scrollProgress"></div>
+  <nav class="nav">
+    <a href="#mission">任务总览</a><a href="#itinerary">每日行程</a><a href="#lodging">住宿</a><a href="#food">饮食策略</a><a href="#checklist">装备清单</a><a href="#budget">预算</a><a href="#certificate">证书</a>
+  </nav>
+  <main class="wrap">
+    <header class="hero" id="top">
+      <div>
+        <div class="eyebrow">Eason × Even · Father & Son Mission</div>
+        <h1><span class="grad">中国少年·文明探索之旅</span></h1>
+        <p class="lead">6月30日夜发武汉 · 7月7日夜归武汉｜成都7天6晚父子硬核成长之旅</p>
+        <p class="quote">七天，看见中国。七天，也看见更好的自己。</p>
+        <div class="tags">
+          <span class="tag">古蜀文明</span><span class="tag">熊猫清晨</span><span class="tag">歼20战机</span><span class="tag">都江堰工程</span><span class="tag">航天探索</span><span class="tag">抗战精神</span><span class="tag">父子成长</span>
+        </div>
+        <div class="btns">
+          <a class="btn" href="#itinerary">开启每日任务</a>
+          <a class="btn alt" href="#budget">预算计算器</a>
+          <a class="btn alt" href="#checklist">装备清单</a>
+          <a class="btn alt" href="#lodging">住宿建议</a>
+        </div>
+      </div>
+    </header>
+
+    <section class="panel" id="mission">
+      <h2>任务指挥舱</h2>
+      <p class="muted">这不是普通旅游，而是一场“文明、科技、工程、诗歌、战争记忆与自我管理”的少年训练。爸爸是队长，Even 是少年探索官。</p>
+      <div class="grid">
+        <div class="stat col-4"><b id="badgeCount">0/7</b>文明徽章进度</div>
+        <div class="stat col-4"><b id="checkCount">0%</b>装备清单完成</div>
+        <div class="stat col-4"><b>3条</b>父子旅行约定</div>
+      </div>
+      <div class="badgebox" id="badges"></div>
+      <div class="subgrid">
+        <div class="box gold">
+          <h3>父子旅行约定</h3>
+          <p>爸爸和你约定三件事：可以哭、可以累、可以生气；第四件事不能忘：情绪结束以后，继续出发。</p>
+        </div>
+        <div class="box blue">
+          <h3>计划变化时的抗挫折脚本</h3>
+          <p>“今天计划变了，这不是失败，是现实给我们的临时任务。真正影响我们的不是变化本身，而是面对变化时我们的选择。我们先做三件事：停十秒、说出感受、选一个下一步。”</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="itinerary">
+      <div class="panel">
+        <h2>每日行程：7枚徽章，7次成长</h2>
+        <p class="muted">每张卡片都包含：时间线、景点解说、出发前引导、父子任务、夜谈问题、吃饭备选和地图按钮。建议每天出门前先读“引导用语”。</p>
+      </div>
+      <div class="timeline" id="days"></div>
+    </section>
+
+    <section class="panel" id="lodging">
+      <h2>住宿核心建议：天府广场 / 文殊院 / 骡马市</h2>
+      <div class="subgrid">
+        <div class="box blue">
+          <h3>首选：天府广场附近</h3>
+          <p>适合作为父子远征基地：去成都博物馆、四川科技馆、人民公园都近；地铁1/2号线方便接成都东、去犀浦方向、去文殊院和武侯祠。路线稳定，晚上回来不折腾。</p>
+        </div>
+        <div class="box green">
+          <h3>第二选择：文殊院 / 骡马市</h3>
+          <p>更安静、更生活化，早晚能看到成都人的慢节奏；吃饭选择多，价格更友好，适合喜欢静谧悠闲、又希望交通不难的父子组合。</p>
+        </div>
+      </div>
+      <div class="box">
+        <h3>筛选标准</h3>
+        <ul>
+          <li>距离地铁站500米内，评分优先 4.6/5 或 9.0/10 以上。</li>
+          <li>优先双床房、25㎡以上、有洗衣机或自助洗衣。</li>
+          <li>避开酒吧夜生活核心区，不选过低价民宿；关键词是“干净、安静、交通友好”。</li>
+          <li>可看：智选假日、全季、亚朵轻居、桔子水晶等中端连锁。</li>
+        </ul>
+        <a class="mapbtn" target="_blank" href="https://map.baidu.com/search/天府广场">天府广场地图</a>
+        <a class="mapbtn" target="_blank" href="https://map.baidu.com/search/文殊院">文殊院地图</a>
+        <a class="mapbtn" target="_blank" href="https://map.baidu.com/search/骡马市">骡马市地图</a>
+      </div>
+    </section>
+
+    <section class="panel" id="food">
+      <h2>清淡饮食策略</h2>
+      <p>成都好吃，但父子行要稳：早餐酒店或便利轻食；正餐优先汤锅、跷脚牛肉、菌汤、蹄花、清汤抄手、蒸鱼、素食。点餐口令：“不要辣、不要花椒、少油、孩子吃，汤底清淡”。</p>
+      <div class="subgrid">
+        <div class="box"><h3>安全菜型</h3><p>菌汤锅、番茄汤锅、清汤抄手、蛋烘糕、蹄花汤、跷脚牛肉清汤、蒸鱼、素菜、豆花饭。</p></div>
+        <div class="box"><h3>避坑提醒</h3><p>“微辣”对外地小孩也可能很辣；串串、冒菜、火锅可作为体验但不建议当天主餐，尤其在大运动量或赶车前。</p></div>
+      </div>
+    </section>
+
+    <section class="panel" id="checklist">
+      <h2>装备清单：少年探索官出发前检查</h2>
+      <p class="muted">勾选会自动保存。让 Even 做“装备官”，每天晚上检查第二天任务包。</p>
+      <div class="check-controls">
+        <button class="btn alt" id="expandChecks">展开全部</button>
+        <button class="btn alt" id="clearChecks">清空勾选</button>
+      </div>
+      <div id="checkCats"></div>
+    </section>
+
+    <section class="panel" id="budget">
+      <h2>预算计算器</h2>
+      <p class="muted">滑动即可实时估算。数值会保存在本机，适合出发前做一次父子财务会议。</p>
+      <div class="grid">
+        <div class="col-8"><div class="calc" id="ranges"></div></div>
+        <div class="col-4">
+          <div class="stat"><b class="money" id="totalMoney">¥0</b>总预算</div>
+          <div class="stat"><b id="perPerson">¥0</b>人均预算</div>
+          <div class="stat"><b id="perDay">¥0</b>日均预算</div>
+          <div class="stat"><b id="level">舒适型</b>预算等级</div>
+          <button class="btn alt" id="resetBudget">恢复默认</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="certificate">
+      <h2>最终证书</h2>
+      <div class="certificate" id="cert">
+        <h2>中国少年·文明探索之旅完成证书</h2>
+        <p>授予：Even 少年探索官</p>
+        <p>你完成了熊猫、战机、古蜀、都江堰、航天、抗战、金沙文明七大探索任务。愿你拥有中国少年的坚韧、智慧、担当与远方。</p>
+        <p class="muted">Eason 队长见证 · 成都远征完成</p>
+      </div>
+      <p id="certHint" class="muted">点亮7枚徽章后，证书会自动出现。</p>
+    </section>
+
+    <section class="panel">
+      <h2>父子收官7问</h2>
+      <div class="footerq">
+        <div class="box">1. 这七天你最想再看一次的地方是哪？为什么？</div>
+        <div class="box">2. 三星堆、金沙、都江堰，哪个最像“古人的超级工程”？</div>
+        <div class="box">3. 如果计划临时变化，你哪一次做得比以前更好了？</div>
+        <div class="box">4. 你觉得“勇敢”是没有情绪，还是带着情绪继续前进？</div>
+        <div class="box">5. 如果给未来的自己一句话，你想写什么？</div>
+        <div class="box">6. 这次旅行里爸爸做得最好的一件事是什么？</div>
+        <div class="box">7. 下一次你想设计一条什么样的 AI 旅行路线？</div>
+      </div>
+    </section>
+  </main>
+  <div class="float"><button onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button><button onclick="document.querySelector('#itinerary').scrollIntoView({behavior:'smooth'})">令</button></div>
+
+  <script>
+    const $ = s => document.querySelector(s);
+    const store = {
+      get(k,d){try{return JSON.parse(localStorage.getItem(k)) ?? d}catch(e){return d}},
+      set(k,v){localStorage.setItem(k,JSON.stringify(v))}
+    };
+    const map = name => `https://map.baidu.com/search/${encodeURIComponent(name)}`;
+    const badges = [
+      ["day1","坚持","🚆"],["day2","守护","🐼"],["day3","创造","🛕"],["day4","智慧","🌊"],["day5","探索","🚀"],["day6","担当","🛡️"],["day7","传承","☀️"]
+    ];
+    const days = [
+      {
+        id:"day0",num:"D0",date:"6/30 周二",title:"铁轨上的期待",theme:"出发：把旅行变成一次少年任务",keys:["期待","启程","父子同行"],ability:"带着目标出发",
+        badge:null,places:["武汉站/汉口站","成都东站"],
+        schedule:[["22:00","武汉夜间启程，登上开往成都的列车。"],["车上","整理小包、确认身份证、耳机、水杯、纸巾；写下3个期待。"]],
+        explain:"真正的旅行不是到达景点才开始，而是在你决定出发的那一刻开始。火车像一条移动的时间隧道，把武汉的夜色慢慢换成成都的晨光。Even 今天的任务不是“熬夜兴奋”，而是学会用秩序管理期待。",
+        guide:"Even，今晚我们不是游客，我们是父子探索队。你的第一个身份是“行军记录官”：记录出发时间、车次、座位和三件最期待的事。一个会记录的人，未来才会真正拥有自己的经历。",
+        task:"写下：我最期待的景点、我担心的一件事、我准备怎么帮助爸爸。",
+        talk:"如果旅途中有一件事不顺利，你希望爸爸怎么提醒你？",
+        tips:"夜车尽量少喝含糖饮料，贵重物品贴身；第二天抵达后不要马上安排高强度项目。",
+        meals:[["夜宵方案A","车站便利店：牛奶/酸奶、饭团、香蕉、水。"],["夜宵方案B","自带轻食：面包、鸡蛋、坚果少量，避免辛辣油腻。"]]
+      },
+      {
+        id:"day1",num:"D1",date:"7/1 周三",title:"抵达蓉城 & 蜀汉君臣的坚韧风骨",theme:"在三国故事里学习失败后的重新出发",keys:["抵达","武侯祠","坚韧"],ability:"从疲惫中保持秩序",badge:"day1",
+        places:["成都东站","成都武侯祠","锦里古街","天府广场"],
+        schedule:[["12:33","抵达成都东站，慢出站，不抢节奏。"],["13:20","午餐：清汤跷脚牛肉或简餐，补水。"],["15:00-17:30","武侯祠：刘备、诸葛亮、蜀汉风骨。"],["18:00","武侯祠附近清淡晚餐。"],["19:20","锦里外圈或酒店附近短散步，不深逛。"],["20:30","回酒店洗衣、复盘、早睡。"]],
+        explain:"武侯祠不是只看“谁打赢了谁”，而是看一个国家在困难中怎样保持信念。刘备一生多次失败，诸葛亮明知蜀汉很难，却仍选择尽责。这里最值得 Even 看到的是：厉害的人不是从不失败，而是在失败后还能整理队伍、重新出发。",
+        guide:"Even，今天你要找三样东西：一副对联、一尊塑像、一个让你觉得“这个人很能扛事”的细节。我们不只看三国热闹，我们要看：一个人在不顺的时候，怎样不把自己交给情绪。",
+        task:"做一次“少年讲解员”：用1分钟给爸爸讲刘备或诸葛亮为什么值得被记住。",
+        talk:"如果你是诸葛亮，明知道很难，还会不会继续做？为什么？",
+        tips:"抵达日不排太满；武侯祠树荫多但闷热，带水。锦里只作轻体验，避免人多耗电。",
+        meals:[["午餐方案A","乐山跷脚牛肉：点清汤牛肉、豆花、青菜，备注不要辣。"],["午餐方案B","成都东站/天府广场简餐：米饭套餐、蒸蛋、汤面。"],["晚餐方案A","武侯祠附近清汤抄手/鸡汤饭：少油少辣。"],["晚餐方案B","素食/轻食：文殊院或天府广场周边素菜馆、菌菇汤。"]]
+      },
+      {
+        id:"day2",num:"D2",date:"7/2 周四",title:"国宝清晨 & 战机翱翔",theme:"从温柔守护到硬核科技",keys:["大熊猫","成飞公园","歼20"],ability:"观察与耐心",badge:"day2",
+        places:["成都大熊猫繁育研究基地","成飞公园","宽窄巷子"],
+        schedule:[["07:00","出发去熊猫基地，避开高温和人流。"],["07:30-11:30","大熊猫基地：月亮产房、太阳产房、幼年熊猫活动区。"],["12:00","午餐：清汤小吃或非遗小吃组合。"],["14:00-17:00","成飞公园：战机、航空工业与中国制造。"],["18:00","鲜菌菇汤锅晚餐。"],["19:30","可选宽窄巷子外圈散步或酒店复盘。"]],
+        explain:"大熊猫基地让人看到“守护”的力量：一个物种从濒危到被系统保护，背后是科学、耐心和一代代人的努力。下午的成飞公园则像另一种中国名片：从仰望天空到制造战机，少年会明白，科技不是喊口号，是设计、试验、失败、改进的长期积累。",
+        guide:"上午看熊猫时，你要像科学家，不只说可爱，要观察：它怎么吃、怎么爬、怎么休息。下午看战机时，你要像工程师，想一想：一架飞机要飞起来，背后需要多少人合作？",
+        task:"完成两张观察卡：熊猫的3个行为；战机的3个设计细节。晚上说出“温柔守护”和“硬核守护”有什么不同。",
+        talk:"你更佩服照顾熊猫的人，还是设计战机的人？如果只能选一个职业体验一天，你选什么？",
+        tips:"熊猫基地务必早到；午后热，成飞公园控制步行量。若下雨，成飞公园可缩短，改为室内休息+阅读三国/航空资料。",
+        meals:[["午餐方案A","非遗小吃清淡组合：清汤龙抄手、蛋烘糕、牛肉锅盔。"],["午餐方案B","熊猫基地/市区简餐：番茄鸡蛋面、白灼青菜、米饭套餐。"],["晚餐方案A","鲜菌菇汤锅：清汤菌菇、豆腐、蔬菜、少量肉片。"],["晚餐方案B","素食餐厅/轻食：菌菇饭、素面、蒸南瓜、青菜。"]]
+      },
+      {
+        id:"day3",num:"D3",date:"7/3 周五",title:"古蜀先民的神秘创造",theme:"三星堆：把想象力铸成青铜",keys:["三星堆","青铜神树","黄金面具"],ability:"想象与证据",badge:"day3",
+        places:["三星堆博物馆","广汉市"],
+        schedule:[["08:00","出发去广汉三星堆，路上预热古蜀问题。"],["09:30-12:00","青铜馆：大立人、纵目面具、神树。"],["12:00","馆区或广汉清淡午餐。"],["13:00-15:00","继续参观：黄金面具、祭祀坑故事、文创区。"],["16:30","回成都休息。"],["18:30","简阳羊肉汤或清汤晚餐。"]],
+        explain:"三星堆最震撼的地方，不是“怪”，而是它证明古蜀先民拥有极强的组织、审美和技术。青铜神树像他们对宇宙的想象，黄金面具像权力与祭祀的象征，纵目面具提醒我们：古人看世界的方式可能和今天完全不同。文明不是只有一种样子，中国文明本来就有很多支流一起汇入大河。",
+        guide:"Even，今天你是考古推理员。看到每件文物先别急着问答案，先问三个问题：它是谁做的？它用来做什么？它说明当时的人相信什么？考古不是背答案，是从碎片里复原一个世界。",
+        task:"选一件最震撼的文物，给它写一张“身份证”：名字、材料、可能用途、它最像外星科技的地方、它最中国的地方。",
+        talk:"如果没有文字记录，我们怎样知道古人曾经怎样生活？",
+        tips:"馆内信息量极大，别贪全；每90分钟休息10分钟。热门展品排队时练习“等待不抱怨”：观察周围人的参观方式。",
+        meals:[["午餐方案A","广汉清汤米线/牛肉汤饭：不辣，补碳水。"],["午餐方案B","博物馆简餐：面、饭、饮水，少吃冰。"],["晚餐方案A","简阳羊肉汤：清汤、萝卜、青菜，蘸料另放。"],["晚餐方案B","回酒店附近素食/家常菜：番茄蛋汤、炒青菜、米饭。"]]
+      },
+      {
+        id:"day4",num:"D4",date:"7/4 周六",title:"都江堰工程智慧 & 成都博物馆夜场",theme:"两千年水利工程与一座城市的记忆",keys:["都江堰","李冰父子","成都博物馆"],ability:"工程思维",badge:"day4",
+        places:["都江堰景区","鱼嘴分水堤","飞沙堰","宝瓶口","成都博物馆"],
+        schedule:[["07:30","出发去都江堰，越早越凉快。"],["09:00-13:00","都江堰核心：鱼嘴、飞沙堰、宝瓶口、安澜索桥。"],["13:20","午餐：蒸鱼/清汤家常菜。"],["15:30","返回成都，酒店休息。"],["17:30-20:30","成都博物馆夜场：城市历史收束与补充。"]],
+        explain:"都江堰最厉害的地方，是它没有硬把水堵住，而是顺着水的脾气办事。鱼嘴负责分水，飞沙堰负责泄洪排沙，宝瓶口负责控制入水量。李冰父子的智慧告诉我们：真正强大不是蛮干，而是看懂规律、借力打力。晚上去成都博物馆，是把都江堰带来的“天府之国”放回一座城市的长历史里看。",
+        guide:"今天你要把自己想象成一名古代工程师：没有电，没有挖掘机，没有电脑建模，怎样让一条江既不泛滥，又能灌溉平原？你每看到一个工程点，就要说出它解决了什么问题。",
+        task:"画一张超简版都江堰示意图：岷江、鱼嘴、飞沙堰、宝瓶口、成都平原，并讲给爸爸听。",
+        talk:"遇到情绪像洪水一样冲上来时，你能不能也设计一个自己的“飞沙堰”？",
+        tips:"都江堰+青城山同日会很赶。本路线选择都江堰深玩+晚间博物馆，父子强度更稳。若体力极好，可加南桥夜景，不建议硬塞青城山。",
+        meals:[["午餐方案A","都江堰蒸鱼/河鲜家常菜：清蒸、少油、配蔬菜。"],["午餐方案B","青城老腊肉店改点清淡：番茄蛋汤、土豆丝、青菜、米饭。"],["晚餐方案A","成都博物馆/天府广场附近清汤抄手或粥粉面。"],["晚餐方案B","素食/轻食：文殊院素菜、菌菇面、豆花饭。"]]
+      },
+      {
+        id:"day5",num:"D5",date:"7/5 周日",title:"外太空探索 & 诗圣脊梁",theme:"从科学好奇到文学悲悯",keys:["四川科技馆","杜甫草堂","锦江"],ability:"提问能力",badge:"day5",
+        places:["四川科技馆","杜甫草堂","浣花溪公园","锦江"],
+        schedule:[["09:00-12:00","四川科技馆：航天、力学、机器人、科学互动。"],["12:20","午餐：老妈蹄花或清淡套餐。"],["14:00-16:30","杜甫草堂：诗、漂泊、家国之心。"],["17:30","酒店休息或锦江短散步。"],["20:00","父子夜谈：科学与诗歌都在问什么？"]],
+        explain:"科技馆训练的是“为什么”：为什么火箭能飞？机器人怎样感知？力为什么能改变运动？杜甫草堂训练的是“我能为别人感受到什么”：杜甫住在简陋草堂里，却写下对天下寒士的关心。一个少年既要会向宇宙提问，也要能对人间保持柔软。",
+        guide:"Even，上午你负责提出5个科学问题，下午你负责找到一句最有画面感的诗。今天的挑战是：科学让我们看得更远，文学让我们心里更宽。",
+        task:"完成“5问1诗”：5个科技馆问题 + 1句草堂诗意转述，晚上录一段60秒总结。",
+        talk:"如果杜甫来到科技馆，他会写什么？如果宇航员读杜甫，会想到什么？",
+        tips:"周末科技馆人可能多，排队项目不执着；把“没玩到”转化为“观察别人怎么玩”。草堂树荫多，适合下午慢行。",
+        meals:[["午餐方案A","老妈蹄花：汤清淡、蹄花少量、配青菜和米饭。"],["午餐方案B","科技馆附近简餐：蒸蛋、鸡汤面、番茄牛腩饭少辣。"],["晚餐方案A","锦江附近清汤面/抄手，早点回酒店。"],["晚餐方案B","素食轻餐：蔬菜饭、菌菇汤、豆腐。"]]
+      },
+      {
+        id:"day6",num:"D6",date:"7/6 周一",title:"建川博物馆：真正的硬核精神洗礼",theme:"战争记忆不是刺激，是责任",keys:["抗战","飞虎队","兵器馆"],ability:"担当与敬畏",badge:"day6",
+        places:["建川博物馆聚落","安仁古镇"],
+        schedule:[["08:00","出发去大邑安仁。"],["09:30-12:00","抗战文物馆：普通人的牺牲与坚持。"],["12:00","安仁古镇清淡午餐。"],["13:00-15:30","飞虎队馆、兵器馆：技术、勇气与代价。"],["16:00","返程成都。"],["19:30","锦江/酒店附近轻松散步。"]],
+        explain:"建川博物馆的重点不是让孩子兴奋地看武器，而是理解和平的重量。抗战文物让我们看到历史不是课本上的几行字，而是无数人的生活、选择和牺牲。飞虎队馆连接中国与世界共同抗战，兵器馆则提醒我们：技术越强，越需要责任感。",
+        guide:"Even，今天我们用更成熟的方式参观：不喧哗，不把战争当游戏。你可以对飞机和武器好奇，但要记住，每一件展品背后都有人真实经历过恐惧、坚持和分别。",
+        task:"写下三句话：我看到的勇敢、我看到的代价、我以后能承担的一件小责任。",
+        talk:"真正的硬核，是武器厉害，还是人在困难中仍然守住责任？",
+        tips:"这一天内容厚重，爸爸要观察 Even 情绪；如果压抑或疲惫，减少展馆数量，在安仁古镇慢走。",
+        meals:[["午餐方案A","安仁古镇家常菜：蒸蛋、青菜、番茄汤、白米饭。"],["午餐方案B","面馆/豆花饭：不要辣椒，清汤。"],["晚餐方案A","成都清汤抄手/粥：让胃和情绪都放松。"],["晚餐方案B","菌汤锅/素食：补水补菜，避免夜间油辣。"]]
+      },
+      {
+        id:"day7",num:"D7",date:"7/7 周二",title:"金沙文明收束 & 夜归武汉",theme:"太阳神鸟：文明会流动，也会传承",keys:["金沙遗址","太阳神鸟","返程"],ability:"总结与传承",badge:"day7",
+        places:["金沙遗址博物馆","人民公园","文殊院","成都东站"],
+        schedule:[["09:00-11:30","金沙遗址博物馆：太阳神鸟、金面具、古蜀延续。"],["12:00","午餐：甜皮鸭/开水白菜/清淡川菜。"],["14:00-16:30","轻成都三选一：人民公园、文殊院、酒店休息。"],["17:00","早晚餐，整理行李。"],["18:30-19:30","成都东站候车，夜归武汉。"]],
+        explain:"金沙像三星堆的回声。太阳神鸟金饰非常薄，却承载了古蜀人对太阳、生命和时间的想象。它告诉 Even：文明不是突然出现又突然消失，它会变化、迁移、融合，也会被后来的人重新发现。今天的核心不是再多看一个馆，而是把七天看到的中国连成一条线。",
+        guide:"Even，今天你要完成最后任务：把三星堆、都江堰、杜甫、建川、金沙连成一张中国文明地图。你会发现，文明不是一个景点，文明是很多代人一起留下的答案。",
+        task:"完成收官7问；点亮最后徽章；给未来的自己写一句话。",
+        talk:"这七天之后，你觉得“中国少年”四个字里，最重要的是哪两个字？",
+        tips:"返程日不要硬拼；优先保证行李、车票、身份证、充电。下午选轻活动，给旅程留一个漂亮收束。",
+        meals:[["午餐方案A","清淡川菜：开水白菜、蒸蛋、甜皮鸭少量、青菜。"],["午餐方案B","金沙附近简餐：汤面、米饭套餐、豆花。"],["晚餐方案A","成都东站提前吃：粥/面/饭团/牛奶，避免上车前太油。"],["晚餐方案B","文殊院/天府广场轻食：素面、菌菇饭、汤。"]]
+      }
+    ];
+
+    const checklist = [
+      ["证件与核心",["身份证/户口本或儿童证件","车票/订单截图","酒店订单截图","少量现金","银行卡/手机支付","紧急联系人纸条"]],
+      ["父亲装备",["速干T恤3-4件","轻薄外套","舒适步行鞋","备用眼镜/充电器","随身小包"]],
+      ["Even装备",["速干T恤4件","长裤/短裤各2","薄外套","舒适运动鞋","睡衣","小背包"]],
+      ["防晒雨具防蚊",["遮阳帽","防晒霜","折叠伞/雨衣","驱蚊液","小毛巾","湿巾纸巾"]],
+      ["电子设备",["手机充电器","充电宝","耳机","数据线","拍照设备","离线地图/行程截图"]],
+      ["药品护理",["创可贴","肠胃药","退热药","晕车药","碘伏棉签","常用过敏药","口罩"]],
+      ["少年任务装备",["小笔记本","黑色签字笔","贴纸/印章","小望远镜可选","文物观察卡","每日徽章挑战表"]],
+      ["夜车随身包",["水杯","薄毯/外套","眼罩","纸巾","轻食","牙刷牙膏","第二天换洗内衣"]],
+      ["出发前最终检查",["关好门窗","检查电源燃气","倒垃圾","确认天气","确认车站时间","手机电量90%以上"]]
+    ];
+    const budgetDefaults = [
+      ["hotel","酒店/晚",450,250,900,50],["nights","住宿晚数",6,1,10,1],["food","餐饮/天",240,100,600,20],
+      ["days","旅行天数",7,1,10,1],["city","市内交通/天",100,20,300,20],["around","周边交通合计",800,300,2000,50],
+      ["tickets","门票预约讲解合计",1000,300,2500,50],["souvenir","纪念品",400,0,1500,50],["emergency","机动金",600,0,2000,50],["people","人数",2,1,4,1]
+    ];
+
+    function renderBadges(){
+      const done = store.get("ce_badges",[]);
+      $("#badges").innerHTML = badges.map(([id,name,icon],i)=>`<div class="badge ${done.includes(id)?"done":""}"><div><span>${icon}</span><b>D${i+1} ${name}</b></div></div>`).join("");
+      $("#badgeCount").textContent = `${done.length}/7`;
+      $("#cert").classList.toggle("show",done.length===7);
+      $("#certHint").style.display = done.length===7 ? "none" : "block";
+    }
+    function lightBadge(id){
+      if(!id) return;
+      const done = store.get("ce_badges",[]);
+      if(!done.includes(id)) done.push(id);
+      store.set("ce_badges",done);
+      renderBadges();
+    }
+    function renderDays(){
+      $("#days").innerHTML = days.map((d,i)=>`
+        <article class="day ${i<2?"open":""}" id="${d.id}">
+          <button class="dayhead" type="button">
+            <div class="daynum">${d.num}</div>
+            <div class="daytitle"><h3>${d.date} · ${d.title}</h3><div class="muted">${d.theme}</div></div>
+            <div class="chev">⌄</div>
+          </button>
+          <div class="daybody">
+            <div class="chips">${d.keys.map(k=>`<span class="chip">${k}</span>`).join("")}<span class="chip">能力：${d.ability}</span></div>
+            <div class="subgrid">
+              <div class="box"><h3>时间线</h3><div class="schedule">${d.schedule.map(s=>`<div class="slot"><div class="time">${s[0]}</div><div>${s[1]}</div></div>`).join("")}</div></div>
+              <div class="box gold"><h3>游玩前引导用语</h3><p>${d.guide}</p></div>
+            </div>
+            <div class="subgrid">
+              <div class="box blue"><h3>核心景点解说</h3><p>${d.explain}</p></div>
+              <div class="box green"><h3>父子挑战任务</h3><p>${d.task}</p><h3>夜谈问题</h3><p>${d.talk}</p></div>
+            </div>
+            <div class="subgrid">
+              <div class="box"><h3>吃饭明确备选</h3><div class="meal">${d.meals.map(m=>`<div class="mealrow"><b>${m[0]}：</b>${m[1]}</div>`).join("")}</div></div>
+              <div class="box"><h3>天气/体力提醒</h3><p>${d.tips}</p><h3>地图按钮</h3>${d.places.map(p=>`<a class="mapbtn" target="_blank" href="${map(p)}">${p}</a>`).join("")}</div>
+            </div>
+            ${d.badge?`<button class="btn" onclick="lightBadge('${d.badge}')">点亮今日徽章：${badges.find(b=>b[0]===d.badge)[1]}</button>`:""}
+          </div>
+        </article>`).join("");
+      document.querySelectorAll(".dayhead").forEach(btn=>btn.addEventListener("click",()=>btn.parentElement.classList.toggle("open")));
+    }
+    function renderChecklist(){
+      const done = store.get("ce_checks",[]);
+      $("#checkCats").innerHTML = checklist.map((cat,ci)=>`<div class="cat ${ci<2?"open":""}"><button type="button">${cat[0]} <span>⌄</span></button><div class="catitems">${cat[1].map((it,ii)=>{
+        const id = `c_${ci}_${ii}`;
+        return `<label class="item ${done.includes(id)?"checked":""}"><input type="checkbox" data-id="${id}" ${done.includes(id)?"checked":""}>${it}</label>`;
+      }).join("")}</div></div>`).join("");
+      document.querySelectorAll(".cat>button").forEach(b=>b.addEventListener("click",()=>b.parentElement.classList.toggle("open")));
+      document.querySelectorAll("#checkCats input").forEach(input=>input.addEventListener("change",()=>{
+        const arr = store.get("ce_checks",[]), id=input.dataset.id;
+        const next = input.checked ? [...new Set([...arr,id])] : arr.filter(x=>x!==id);
+        store.set("ce_checks",next); renderChecklist(); updateCheckCount();
+      }));
+      updateCheckCount();
+    }
+    function updateCheckCount(){
+      const total = checklist.reduce((a,c)=>a+c[1].length,0), done = store.get("ce_checks",[]).length;
+      $("#checkCount").textContent = `${Math.round(done/total*100)}%`;
+    }
+    function renderBudget(){
+      const vals = store.get("ce_budget",Object.fromEntries(budgetDefaults.map(b=>[b[0],b[2]])));
+      $("#ranges").innerHTML = budgetDefaults.map(([id,label,def,min,max,step])=>`
+        <div class="range"><label><b>${label}</b>：<span id="v_${id}">${vals[id]??def}</span></label>
+        <input type="range" id="r_${id}" min="${min}" max="${max}" step="${step}" value="${vals[id]??def}"></div>`).join("");
+      budgetDefaults.forEach(([id])=>$("#r_"+id).addEventListener("input",()=>{
+        vals[id]=Number($("#r_"+id).value); store.set("ce_budget",vals); calcBudget(vals);
+      }));
+      calcBudget(vals);
+    }
+    function calcBudget(v){
+      budgetDefaults.forEach(([id])=>{ const el=$("#v_"+id); if(el) el.textContent=v[id]; });
+      const total = v.hotel*v.nights + v.food*v.days + v.city*v.days + v.around + v.tickets + v.souvenir + v.emergency;
+      $("#totalMoney").textContent = `¥${total.toLocaleString("zh-CN")}`;
+      $("#perPerson").textContent = `¥${Math.round(total/v.people).toLocaleString("zh-CN")}`;
+      $("#perDay").textContent = `¥${Math.round(total/v.days).toLocaleString("zh-CN")}`;
+      $("#level").textContent = total<=6500 ? "节省型" : total<=9500 ? "舒适型" : "品质型/偏高";
+    }
+    window.addEventListener("scroll",()=>{
+      const h = document.documentElement.scrollHeight - innerHeight;
+      $("#scrollProgress").style.width = `${Math.max(0,Math.min(100,scrollY/h*100))}%`;
+    });
+    $("#expandChecks").onclick=()=>document.querySelectorAll(".cat").forEach(c=>c.classList.add("open"));
+    $("#clearChecks").onclick=()=>{store.set("ce_checks",[]);renderChecklist()};
+    $("#resetBudget").onclick=()=>{localStorage.removeItem("ce_budget");renderBudget()};
+    renderBadges(); renderDays(); renderChecklist(); renderBudget();
+  </script>
+</body>
+</html>
