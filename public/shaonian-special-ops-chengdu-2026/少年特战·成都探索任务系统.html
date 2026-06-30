@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>少年特战 · 成都探索任务系统</title>
+<style>
+:root{
+  --deep:#05070f;--panel:#0c1226;--panel2:#101a36;--gold:#ffd24a;--gold2:#ffe79a;
+  --cyber:#2ff3ff;--cyber2:#4b7bff;--green:#39ff8b;--red:#ff4d6d;--orange:#ff9d3c;--purple:#b07bff;
+  --txt:#eaf1ff;--txt2:#93a4cf;--line:rgba(75,123,255,.3);
+  --d0:#8ea0c8;--d1:#2ff3ff;--d2:#4b7bff;--d3:#b07bff;--d4:#39ff8b;--d5:#ff9d3c;--d6:#ff4d6d;--d7:#ffd24a;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif;
+  background:var(--deep);color:var(--txt);line-height:1.7;font-size:17px;overflow-x:hidden;}
+.sky{position:fixed;inset:0;z-index:-4;background:
+  radial-gradient(1000px 700px at 85% -5%,rgba(47,243,255,.12),transparent 60%),
+  radial-gradient(900px 600px at 5% 8%,rgba(75,123,255,.14),transparent 55%),
+  radial-gradient(700px 500px at 50% 110%,rgba(176,123,255,.1),transparent 60%),
+  linear-gradient(180deg,#05070f,#070b1c 45%,#04060f);}
+.camo{position:fixed;inset:0;z-index:-3;pointer-events:none;opacity:.16;background:
+  radial-gradient(130px 90px at 10% 16%,#1f2e1c,transparent 70%),
+  radial-gradient(170px 120px at 82% 10%,#22311f,transparent 70%),
+  radial-gradient(150px 110px at 60% 64%,#19283a,transparent 70%),
+  radial-gradient(190px 140px at 28% 88%,#212b19,transparent 70%),
+  radial-gradient(120px 90px at 92% 80%,#1c2433,transparent 70%);}
+.mil-grid{position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.6;
+  background-image:linear-gradient(rgba(47,243,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(47,243,255,.045) 1px,transparent 1px);
+  background-size:46px 46px;}
+#stars{position:fixed;inset:0;z-index:-1;pointer-events:none;}
+.star{position:absolute;background:#fff;border-radius:50%;opacity:.7;animation:tw 3s infinite ease-in-out;}
+@keyframes tw{0%,100%{opacity:.15;}50%{opacity:.95;}}
+.scan{position:fixed;left:0;right:0;height:2px;z-index:-1;background:linear-gradient(90deg,transparent,rgba(47,243,255,.5),transparent);animation:scan 6s linear infinite;}
+@keyframes scan{0%{top:0;}100%{top:100%;}}
+
+#xpTop{position:fixed;top:0;left:0;height:5px;width:0;z-index:60;background:linear-gradient(90deg,var(--cyber),var(--gold));box-shadow:0 0 14px var(--cyber);}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:50;backdrop-filter:blur(12px);background:rgba(5,7,15,.82);border-bottom:1px solid var(--line);}
+.nav-inner{max-width:1080px;margin:auto;display:flex;align-items:center;gap:8px;padding:8px 12px;}
+.rankbox{display:flex;align-items:center;gap:8px;flex:1;min-width:0;}
+.rank-emoji{font-size:22px;}
+.rank-info{min-width:0;}
+.rank-info .r1{font-size:11px;color:var(--cyber);letter-spacing:1px;line-height:1;}
+.rank-info .r2{font-weight:900;color:var(--gold);font-size:15px;line-height:1.2;white-space:nowrap;}
+.mini-xp{height:6px;width:110px;border-radius:6px;background:rgba(255,255,255,.1);overflow:hidden;}
+.mini-xp i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyber),var(--gold));transition:width .6s;}
+.sound-btn{flex:none;cursor:pointer;border:1px solid var(--line);background:rgba(47,243,255,.08);color:var(--cyber);width:38px;height:38px;border-radius:11px;font-size:17px;}
+.sound-btn:active{transform:scale(.9);}
+
+main{max-width:1080px;margin:0 auto;padding:0 14px 70px;}
+section{padding:46px 0 8px;scroll-margin-top:60px;}
+.sec-title{font-size:23px;font-weight:900;margin:0 0 4px;background:linear-gradient(90deg,var(--gold),var(--cyber));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.sec-title::before{content:"// ";color:var(--cyber);font-family:monospace;opacity:.75;-webkit-text-fill-color:var(--cyber);}
+.sec-sub{color:var(--txt2);margin:0 0 18px;font-size:14px;}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:80px 16px 40px;}
+.hero .codeword{color:var(--cyber);letter-spacing:5px;font-size:12px;font-weight:800;border:1px solid var(--line);padding:6px 16px;border-radius:30px;background:rgba(47,243,255,.06);}
+.jets{font-size:40px;letter-spacing:6px;margin:18px 0 6px;animation:fly 4s infinite ease-in-out;}
+@keyframes fly{0%,100%{transform:translateX(-6px);}50%{transform:translateX(6px);}}
+.hero h1{font-size:clamp(30px,9vw,60px);margin:6px 0;font-weight:900;line-height:1.05;
+  background:linear-gradient(120deg,#fff,var(--gold) 50%,var(--cyber));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 40px rgba(47,243,255,.2);}
+.hero h2{font-size:clamp(13px,3.6vw,17px);color:var(--txt2);font-weight:600;margin:8px 0 18px;}
+.tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:660px;margin-bottom:8px;}
+.tag{font-size:12px;padding:6px 12px;border-radius:30px;border:1px solid var(--line);background:rgba(75,123,255,.1);color:var(--gold2);}
+.mission-quote{margin:24px auto 6px;max-width:560px;font-size:clamp(16px,4vw,21px);font-weight:900;color:#fff;}
+.mission-quote span{color:var(--gold);}
+.start-btn{margin-top:30px;cursor:pointer;border:none;border-radius:50px;padding:18px 40px;font-size:20px;font-weight:900;
+  background:linear-gradient(135deg,var(--gold),var(--orange));color:#2a1500;box-shadow:0 0 30px rgba(255,210,74,.5);animation:pulse 1.8s infinite;letter-spacing:2px;}
+@keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 30px rgba(255,210,74,.5);}50%{transform:scale(1.05);box-shadow:0 0 45px rgba(255,210,74,.8);}}
+.start-btn:active{transform:scale(.94);}
+.btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:18px;}
+.btn{cursor:pointer;border:none;border-radius:13px;padding:12px 18px;font-size:14px;font-weight:800;background:rgba(47,243,255,.1);color:var(--cyber);border:1px solid var(--line);transition:.2s;}
+.btn:active{transform:scale(.93);}
+.btn:hover{background:rgba(47,243,255,.2);}
+.scroll-hint{margin-top:30px;color:var(--txt2);font-size:12px;animation:bob 2s infinite;}
+@keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+.glow{border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,var(--panel),var(--panel2));box-shadow:0 8px 28px rgba(0,0,0,.45);position:relative;overflow:hidden;}
+.glow::after{content:"";position:absolute;top:7px;left:7px;right:7px;bottom:7px;pointer-events:none;opacity:.32;color:var(--cyber);
+  background:
+   linear-gradient(currentColor,currentColor) left top/12px 2px no-repeat,
+   linear-gradient(currentColor,currentColor) left top/2px 12px no-repeat,
+   linear-gradient(currentColor,currentColor) right top/12px 2px no-repeat,
+   linear-gradient(currentColor,currentColor) right top/2px 12px no-repeat,
+   linear-gradient(currentColor,currentColor) left bottom/12px 2px no-repeat,
+   linear-gradient(currentColor,currentColor) left bottom/2px 12px no-repeat,
+   linear-gradient(currentColor,currentColor) right bottom/12px 2px no-repeat,
+   linear-gradient(currentColor,currentColor) right bottom/2px 12px no-repeat;}
+.tread{height:14px;margin:6px 0 18px;border-radius:4px;border-top:3px solid #0a1020;border-bottom:3px solid #0a1020;
+  background:repeating-linear-gradient(90deg,#0e1730 0 13px,#1b294a 13px 21px);opacity:.75;}
+
+.rank-hud{padding:18px 20px;margin-bottom:18px;text-align:center;}
+.rank-hud .big-rank{font-size:30px;font-weight:900;color:var(--gold);}
+.rank-hud .big-rank .em{font-size:34px;}
+.bar{height:16px;border-radius:20px;background:rgba(255,255,255,.08);overflow:hidden;border:1px solid var(--line);margin:12px 0 6px;}
+.bar i{display:block;height:100%;width:0;border-radius:20px;background:linear-gradient(90deg,var(--cyber),var(--gold));transition:width .7s cubic-bezier(.2,.9,.2,1);box-shadow:0 0 14px var(--cyber);}
+.bar-label{display:flex;justify-content:space-between;font-size:13px;color:var(--txt2);}
+.bar-label b{color:var(--gold);}
+.badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;}
+.badge{text-align:center;padding:16px 8px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.02);transition:.3s;filter:grayscale(1) brightness(.55);opacity:.55;}
+.badge .ring{width:62px;height:62px;margin:0 auto 8px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;border:2px dashed var(--line);transition:.3s;position:relative;}
+.badge .lock{position:absolute;font-size:15px;right:-2px;bottom:-2px;}
+.badge .day{font-size:11px;color:var(--txt2);letter-spacing:1px;}
+.badge .nm{font-weight:900;font-size:16px;margin-top:2px;}
+.badge.on{filter:none;opacity:1;transform:translateY(-3px);}
+.badge.on .ring{border-style:solid;box-shadow:0 0 24px currentColor;animation:pop .6s;}
+.badge.on .lock{display:none;}
+@keyframes pop{0%{transform:scale(.4) rotate(-25deg);}60%{transform:scale(1.25) rotate(10deg);}100%{transform:scale(1) rotate(0);}}
+.badge.on .nm{color:var(--gold2);}
+
+#cert{margin-top:22px;display:none;text-align:center;padding:32px 18px;border-radius:20px;border:2px solid var(--gold);
+  background:radial-gradient(circle at 50% 0%,rgba(255,210,74,.16),transparent 70%),var(--panel);box-shadow:0 0 50px rgba(255,210,74,.3);}
+#cert.show{display:block;animation:pop .8s;}
+#cert .seal{font-size:56px;}
+#cert h3{font-size:22px;color:var(--gold);margin:4px 0;}
+#cert .wish{color:var(--gold2);font-weight:800;font-size:17px;margin-top:8px;}
+
+/* 军械图鉴 */
+.ars-bar{margin-bottom:16px;}
+.ars-cats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.ars-cat{cursor:pointer;font-size:13px;font-weight:800;padding:9px 15px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--txt2);letter-spacing:1px;transition:.2s;font-family:monospace;}
+.ars-cat:active{transform:scale(.94);}
+.ars-cat.active{background:rgba(47,243,255,.15);color:var(--cyber);border-color:var(--cyber);box-shadow:0 0 14px rgba(47,243,255,.3);}
+.ars-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:14px;}
+.ars-card{padding:14px;border-radius:16px;border:1px solid var(--line);position:relative;overflow:hidden;cursor:pointer;transition:.22s;background:linear-gradient(180deg,#0e1730,#080e1f);}
+.ars-card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 12px 26px rgba(0,0,0,.55);}
+.ars-card:active{transform:scale(.98);}
+.ars-card .tagno{position:absolute;top:9px;right:11px;font-size:10px;font-family:monospace;color:var(--txt2);letter-spacing:1px;}
+.ars-card .lockbadge{position:absolute;top:9px;left:11px;font-size:10px;font-weight:800;color:var(--txt2);font-family:monospace;}
+.ars-card.studied .lockbadge{color:var(--green);}
+.ars-svg{height:96px;display:flex;align-items:center;justify-content:center;color:var(--accent);margin-top:6px;filter:drop-shadow(0 0 6px rgba(0,0,0,.6));}
+.ars-svg svg{max-width:100%;max-height:100%;}
+.ars-card .nm{font-weight:900;font-size:16px;margin-top:8px;}
+.ars-card .desig{font-family:monospace;font-size:11px;color:var(--accent);letter-spacing:1.5px;}
+.ars-card .org{font-size:12px;color:var(--txt2);margin:3px 0 7px;}
+.ars-spec{display:flex;flex-wrap:wrap;gap:5px;}
+.ars-spec span{font-size:11px;background:rgba(255,255,255,.05);border:1px solid var(--line);padding:3px 8px;border-radius:8px;color:var(--txt);}
+.ars-card .more{font-size:11px;color:var(--accent);margin-top:8px;font-weight:700;letter-spacing:.5px;}
+.ars-fact{font-size:12.5px;color:var(--gold2);line-height:1.6;max-height:0;overflow:hidden;transition:max-height .45s ease;}
+.ars-card.open .ars-fact{max-height:220px;margin-top:6px;}
+
+.code-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.code{padding:22px;}
+.code h3{margin:0 0 12px;font-size:18px;color:var(--cyber);}
+.rule{display:flex;align-items:center;gap:10px;font-size:16px;margin:8px 0;font-weight:700;}
+.rule .n{flex:none;width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(47,243,255,.15);color:var(--cyber);font-weight:900;}
+.iron{margin-top:14px;padding:12px 14px;border-radius:12px;border:1px dashed var(--gold);background:rgba(255,210,74,.08);}
+.iron b{color:var(--gold2);}
+.hl{background:linear-gradient(transparent 58%,rgba(255,210,74,.4) 58%);padding:0 2px;font-weight:900;color:var(--gold2);}
+.change-chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;}
+.change-chips span{font-size:12px;background:rgba(255,77,109,.14);border:1px solid rgba(255,77,109,.35);color:#ffb0c0;padding:4px 10px;border-radius:20px;}
+.callout{font-style:normal;color:#cfe;background:rgba(75,123,255,.1);border-left:3px solid var(--cyber);padding:10px 14px;border-radius:0 10px 10px 0;font-size:14.5px;}
+
+.lv-card{margin-bottom:16px;border-left:5px solid var(--accent);}
+.lv-head{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none;}
+.lv-no{flex:none;width:60px;height:60px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#04122a;background:var(--accent);box-shadow:0 0 18px var(--accent);position:relative;}
+.lv-no small{font-size:9px;font-weight:900;opacity:.9;}
+.lv-no b{font-size:24px;line-height:1;font-weight:900;}
+.lv-meta{flex:1;min-width:0;}
+.lv-meta .lvtag{font-size:11px;color:var(--accent);font-weight:800;letter-spacing:1px;font-family:monospace;}
+.lv-meta .code-name{font-size:19px;font-weight:900;}
+.lv-meta .date{font-size:12px;color:var(--txt2);}
+.lv-stat{flex:none;display:flex;align-items:center;gap:8px;}
+.clear-pill{font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid var(--line);color:var(--txt2);font-weight:700;}
+.clear-pill.done{background:rgba(57,255,139,.16);border-color:var(--green);color:var(--green);}
+.chev{transition:.3s;color:var(--txt2);}
+.lv-card.open .chev{transform:rotate(180deg);}
+.lv-body{max-height:0;overflow:hidden;transition:max-height .55s ease;}
+.lv-card.open .lv-body{max-height:4500px;}
+.lv-inner{padding:2px 18px 20px;}
+.chips2{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+.chips2 span{font-size:12px;padding:4px 11px;border-radius:20px;border:1px solid var(--line);background:rgba(47,243,255,.08);color:var(--cyber);}
+.blk{margin:14px 0;}
+.blk h4{margin:0 0 6px;font-size:14px;color:var(--gold);letter-spacing:.5px;display:flex;align-items:center;gap:7px;font-weight:800;}
+.blk .body{font-size:15px;}
+.action{list-style:none;padding:0;margin:0;}
+.action li{padding:7px 0 7px 16px;border-left:2px solid var(--line);position:relative;font-size:14.5px;}
+.action li::before{content:"";position:absolute;left:-5px;top:14px;width:9px;height:9px;border-radius:50%;background:var(--accent);}
+.intel{background:rgba(75,123,255,.07);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:8px 0;}
+.intel .nm{font-weight:800;color:var(--gold2);font-size:14px;}
+.tip{font-size:13.5px;color:var(--orange);background:rgba(255,157,60,.09);border:1px dashed rgba(255,157,60,.4);padding:10px 12px;border-radius:10px;}
+.maps{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.map-btn{font-size:12px;text-decoration:none;color:var(--cyber);border:1px solid var(--line);padding:6px 12px;border-radius:20px;background:rgba(47,243,255,.06);}
+.map-btn:active{transform:scale(.94);}
+.clear-btn{margin-top:16px;width:100%;padding:15px;border-radius:13px;border:2px solid var(--accent);cursor:pointer;font-weight:900;font-size:16px;background:rgba(255,210,74,.1);color:var(--gold2);letter-spacing:1px;}
+.clear-btn:active{transform:scale(.97);}
+.clear-btn.done{background:rgba(57,255,139,.16);border-color:var(--green);color:var(--green);cursor:default;}
+
+.pack-top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px;padding:16px;}
+.pack-stat{flex:1;min-width:200px;}
+.mini-btn{cursor:pointer;font-size:13px;padding:9px 14px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--txt);font-weight:700;}
+.mini-btn:active{transform:scale(.93);}
+.pack-cat{margin-bottom:12px;}
+.pack-cat h4{margin:0;padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:15px;color:var(--gold);font-weight:800;}
+.pack-cat h4 .ct{margin-left:auto;font-size:12px;color:var(--txt2);font-weight:600;}
+.pack-cat h4 .cv{transition:.3s;color:var(--txt2);}
+.pack-cat.closed h4 .cv{transform:rotate(-90deg);}
+.pack-items{max-height:1600px;overflow:hidden;transition:max-height .4s ease;padding:0 18px 12px;}
+.pack-cat.closed .pack-items{max-height:0;padding:0 18px;}
+.chk{display:flex;align-items:center;gap:11px;padding:8px 0;cursor:pointer;font-size:15px;border-bottom:1px solid rgba(255,255,255,.04);}
+.chk:last-child{border-bottom:none;}
+.box{flex:none;width:24px;height:24px;border-radius:7px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;transition:.2s;font-size:15px;color:transparent;}
+.chk.on .box{background:var(--green);border-color:var(--green);color:#042311;}
+.chk.on .lab{color:var(--txt2);text-decoration:line-through;opacity:.6;}
+
+.finale{padding:28px 22px;text-align:center;margin-top:24px;}
+.finale h3{color:var(--gold);font-size:20px;}
+.powers{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:16px 0;}
+.powers span{font-size:14px;font-weight:800;padding:7px 14px;border-radius:30px;border:1px solid var(--gold);color:var(--gold2);background:rgba(255,210,74,.08);}
+.finale ol{text-align:left;max-width:500px;margin:14px auto;padding-left:22px;}
+.finale li{margin:7px 0;}
+footer{text-align:center;color:var(--txt2);font-size:12px;padding:26px 10px 6px;}
+
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(40px);z-index:80;background:var(--panel2);border:1px solid var(--gold);color:var(--gold2);padding:12px 22px;border-radius:30px;font-weight:800;opacity:0;transition:.35s;box-shadow:0 8px 30px rgba(0,0,0,.5);pointer-events:none;font-size:14px;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+#levelup{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;background:rgba(3,5,12,.78);backdrop-filter:blur(4px);}
+#levelup.show{display:flex;animation:fade .3s;}
+@keyframes fade{from{opacity:0;}to{opacity:1;}}
+.lu-card{text-align:center;padding:40px 30px;border-radius:24px;border:2px solid var(--gold);background:var(--panel);box-shadow:0 0 60px rgba(255,210,74,.4);animation:pop .7s;max-width:340px;}
+.lu-card .ic{font-size:64px;}
+.lu-card .t1{color:var(--cyber);letter-spacing:3px;font-size:13px;font-weight:800;}
+.lu-card .t2{font-size:30px;font-weight:900;color:var(--gold);margin:6px 0;}
+.lu-card .t3{color:var(--txt2);font-size:14px;}
+.lu-card button{margin-top:18px;cursor:pointer;border:none;border-radius:30px;padding:12px 30px;font-weight:900;font-size:15px;background:linear-gradient(135deg,var(--gold),var(--orange));color:#2a1500;}
+#confetti{position:fixed;inset:0;z-index:100;pointer-events:none;}
+.conf{position:absolute;width:10px;height:14px;top:-20px;animation:fall linear forwards;}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.2;}}
+
+@media(max-width:720px){
+  .code-grid{grid-template-columns:1fr;}
+  body{font-size:16px;}
+  .rank-info .r2{font-size:13px;}
+  .mini-xp{width:80px;}
+  section{padding:38px 0 4px;}
+  .ars-grid{grid-template-columns:1fr 1fr;gap:10px;}
+  .ars-card{padding:11px;}
+}
+</style>
+</head>
+<body>
+<div class="sky"></div>
+<div class="camo"></div>
+<div class="mil-grid"></div>
+<div id="stars"></div>
+<div class="scan"></div>
+<div id="xpTop"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="rankbox">
+      <span class="rank-emoji" id="rankEmoji">🪖</span>
+      <div class="rank-info">
+        <div class="r1">特工 EVEN · 当前军衔</div>
+        <div class="r2" id="rankName">新兵 · LV.0</div>
+      </div>
+      <div class="mini-xp"><i id="miniXp"></i></div>
+    </div>
+    <button class="sound-btn" id="soundBtn" onclick="toggleSound()" title="音效开关">🔊</button>
+  </div>
+</nav>
+
+<div class="content">
+<header class="hero" id="top">
+  <div class="codeword">MISSION · CHENGDU</div>
+  <div class="jets">✈️🚀🛡️</div>
+  <h1>EVEN 的<br>成都探索任务</h1>
+  <h2>6月30日夜发武汉 · 7月7日夜归武汉 ｜ 7天6晚 · 8大关卡 · 7枚勋章</h2>
+  <div class="tags" style="margin:14px 0 0;">
+    <span class="tag">🧒 特工：Even</span><span class="tag">🎖️ 队长：Eason（爸爸）</span>
+  </div>
+  <div class="mission-quote">七天，看见中国。<br>七天，也变成<span>更强的自己。</span></div>
+  <button class="start-btn" onclick="play('start');go('#missions')">▶ 开始任务</button>
+  <div class="btns">
+    <button class="btn" onclick="play('tap');go('#arsenal')">🎯 军械图鉴</button>
+    <button class="btn" onclick="play('tap');go('#badges')">🏅 我的勋章墙</button>
+    <button class="btn" onclick="play('tap');go('#pack')">🎒 检查我的装备</button>
+    <button class="btn" onclick="play('tap');go('#code')">🎮 游戏规则</button>
+  </div>
+  <div class="scroll-hint">▼ 向下滑，进入任务区</div>
+</header>
+
+<main>
+<section id="badges">
+  <h2 class="sec-title">勋章墙 · 升级你的军衔</h2>
+  <p class="sec-sub">每通关一天，就解锁一枚能力勋章，军衔也会跟着往上升！集齐 7 枚 → 晋升「探索司令」！</p>
+  <div class="rank-hud glow">
+    <div style="font-size:12px;color:var(--cyber);letter-spacing:2px;font-weight:800;margin-bottom:4px;">特工 EVEN</div>
+    <div class="big-rank"><span class="em" id="rankEmoji2">🪖</span> <span id="rankName2">新兵</span></div>
+    <div class="bar"><i id="badgeBar"></i></div>
+    <div class="bar-label"><span>经验值 XP</span><span><b id="badgeCount">0</b> / 7 枚勋章</span></div>
+  </div>
+  <div class="badges" id="badgeGrid"></div>
+  <div id="cert">
+    <div class="seal">🏆</div>
+    <div style="color:var(--cyber);letter-spacing:3px;font-size:12px;font-weight:800;">FINAL RANK UNLOCKED</div>
+    <h3>特工 EVEN · 晋升：探索司令 🎖️</h3>
+    <p>Even 通关了 <b style="color:var(--cyber)">熊猫、战机、古蜀、都江堰、航天、抗战、金沙</b> 七大关卡！</p>
+    <p class="wish">愿 Even 拥有中国少年的坚韧、智慧、担当与远方。</p>
+    <p style="color:var(--txt2);font-size:13px;margin-top:8px;">—— 队长 Eason 颁发</p>
+  </div>
+</section>
+
+<section id="arsenal">
+  <h2 class="sec-title">军械图鉴 · ARSENAL</h2>
+  <p class="sec-sub">全是现实里真实存在的装备——坦克、步枪、手枪、战机和导弹。点开每张卡片"研究"一下，看它的真身参数和冷知识。集满整本图鉴，你就是军械大师 🎖️</p>
+  <div class="ars-bar glow" style="padding:14px 16px;">
+    <div class="bar"><i id="arsBar"></i></div>
+    <div class="bar-label"><span>图鉴完成度</span><span><b id="arsCount">0</b> / <span id="arsTotal">0</span> 已研究</span></div>
+  </div>
+  <div class="tread"></div>
+  <div class="ars-cats" id="arsCats"></div>
+  <div class="ars-grid" id="arsGrid"></div>
+</section>
+
+<section id="code">
+  <h2 class="sec-title">游戏规则</h2>
+  <p class="sec-sub">就两张卡，开局看一眼，30秒搞定。</p>
+  <div class="code-grid">
+    <div class="code glow">
+      <h3>🪖 玩家许可</h3>
+      <div class="rule"><span class="n">1</span> 可以哭。</div>
+      <div class="rule"><span class="n">2</span> 可以累。</div>
+      <div class="rule"><span class="n">3</span> 可以生气。</div>
+      <div class="iron">唯一的通关条件只有一条：<br><b class="hl">哭完、累完、气完——接着玩就行。</b></div>
+      <p style="margin-top:12px;color:var(--txt2);font-size:14px;">💡 你想想：玩游戏卡关的时候，有人一直卡在那儿，也有人骂一句接着打。你是哪种？</p>
+    </div>
+    <div class="code glow">
+      <h3>⚠️ 随机事件（每局都会刷）</h3>
+      <p style="font-size:14px;">这趟旅行随时可能随机触发：</p>
+      <div class="change-chips">
+        <span>下雨</span><span>排长队</span><span>景点临时关</span><span>火车晚点</span><span>太热</span><span>太累</span><span>想看的没看到</span>
+      </div>
+      <div class="callout">这些都躲不掉，是游戏自带的。老玩家的操作通常很简单：<b style="color:var(--gold)">耸耸肩，换个打法，接着逛。</b></div>
+      <p style="margin-top:10px;color:var(--txt2);font-size:14px;">真要触发了，你打算怎么应对？想好一招备着。</p>
+    </div>
+  </div>
+</section>
+
+<section id="missions">
+  <h2 class="sec-title">任务关卡 · 8 大关</h2>
+  <p class="sec-sub">点开每一关查看作战简报。完成后按下「完成关卡」，解锁勋章 + 升军衔！</p>
+  <div id="lvList"></div>
+</section>
+
+<section id="pack">
+  <h2 class="sec-title">我的装备背包</h2>
+  <p class="sec-sub">成都7月又闷又晒还可能下雨，出发前把装备一件件勾掉——别落下任何一样！</p>
+  <div class="pack-top glow">
+    <div class="pack-stat">
+      <div class="bar"><i id="packBar"></i></div>
+      <div class="bar-label"><span>装备就绪 <b id="packPct">0%</b></span><span><b id="packDone">0</b> / <span id="packTotal">0</span> 件</span></div>
+    </div>
+    <button class="mini-btn" onclick="play('tap');toggleAllCats()">展开/收起全部</button>
+    <button class="mini-btn" onclick="play('tap');clearPack()">清空重来</button>
+  </div>
+  <div id="packList"></div>
+</section>
+
+<section id="finale">
+  <div class="finale glow">
+    <h3>🎓 通关总结 · 我集齐的 7 个技能</h3>
+    <div class="powers"><span>🔥坚持</span><span>🛡️守护</span><span>🛠️创造</span><span>💧智慧</span><span>🚀探索</span><span>🎖️担当</span><span>🌞传承</span></div>
+    <p style="color:var(--txt2);">回程路上，Even 和爸爸 Eason 随便聊聊这 7 个问题就行（聊天，不是考试）：</p>
+    <ol>
+      <li>这七天你最喜欢哪一天？</li>
+      <li>为什么？</li>
+      <li>哪件文物最震撼？</li>
+      <li>哪个人你最想认识？</li>
+      <li>这一路你觉得自己哪儿不太一样了？</li>
+      <li>如果重来一次，你会改变什么？</li>
+      <li>以后遇到难事，你最想想起这次旅行里的哪一天？</li>
+    </ol>
+    <p style="color:var(--gold);font-weight:800;">下次再出发，去看更大的中国。🚄</p>
+  </div>
+  <footer>🚄 6月30日夜发武汉 · 7月7日夜归武汉　|　少年特战 · 成都探索任务系统 v3.0<br>特工 Even × 队长 Eason　·　继续出发，小队长！</footer>
+</section>
+</main>
+</div>
+
+<div id="toast"></div>
+<div id="confetti"></div>
+<div id="levelup"><div class="lu-card">
+  <div class="ic" id="luIc">🎖️</div>
+  <div class="t1">RANK UP · 军衔晋升</div>
+  <div class="t2" id="luName">上等兵</div>
+  <div class="t3" id="luDesc">你解锁了一枚新勋章！</div>
+  <button onclick="play('tap');closeLevelup()">收到！继续出发 ▶</button>
+</div></div>
+
+<script>
+/* 星空 */
+(function(){let h='';for(let i=0;i<120;i++){const s=(Math.random()*2+0.5).toFixed(1);
+  h+=`<div class="star" style="left:${(Math.random()*100).toFixed(2)}%;top:${(Math.random()*100).toFixed(2)}%;width:${s}px;height:${s}px;animation-delay:${(Math.random()*3).toFixed(2)}s"></div>`;}
+  document.getElementById('stars').innerHTML=h;})();
+
+function go(sel){document.querySelector(sel).scrollIntoView({behavior:'smooth'});}
+window.addEventListener('scroll',()=>{
+  const sc=document.documentElement.scrollTop||document.body.scrollTop;
+  const h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+  document.getElementById('xpTop').style.width=(h>0?(sc/h*100):0)+'%';});
+
+/* 音效 */
+let soundOn=localStorage.getItem('kid_sound')!=='off';
+let actx=null;
+function ensureCtx(){if(!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}}
+function beep(freq,dur,type,vol){
+  if(!soundOn)return;ensureCtx();if(!actx)return;
+  const o=actx.createOscillator(),g=actx.createGain();
+  o.type=type||'square';o.frequency.value=freq;
+  g.gain.setValueAtTime(vol||0.06,actx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001,actx.currentTime+dur);
+  o.connect(g);g.connect(actx.destination);o.start();o.stop(actx.currentTime+dur);
+}
+function play(kind){
+  if(kind==='tap'){beep(620,0.07,'square',0.05);}
+  else if(kind==='start'){beep(440,0.1);setTimeout(()=>beep(660,0.12),90);setTimeout(()=>beep(880,0.16),200);}
+  else if(kind==='unlock'){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,0.18,'triangle',0.07),i*100));}
+  else if(kind==='win'){[523,659,784,1047,1319].forEach((f,i)=>setTimeout(()=>beep(f,0.22,'sawtooth',0.06),i*120));}
+  else if(kind==='check'){beep(880,0.05,'sine',0.04);}
+}
+function toggleSound(){
+  soundOn=!soundOn;localStorage.setItem('kid_sound',soundOn?'on':'off');
+  document.getElementById('soundBtn').textContent=soundOn?'🔊':'🔇';
+  if(soundOn)play('tap');
+}
+document.getElementById('soundBtn').textContent=soundOn?'🔊':'🔇';
+
+let toastT;
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200);}
+
+function confetti(){
+  const box=document.getElementById('confetti');const cols=['#ffd24a','#2ff3ff','#39ff8b','#ff4d6d','#b07bff','#4b7bff'];
+  for(let i=0;i<70;i++){const c=document.createElement('div');c.className='conf';
+    c.style.left=Math.random()*100+'%';c.style.background=cols[i%cols.length];
+    c.style.animationDuration=(1.5+Math.random()*1.5)+'s';c.style.animationDelay=(Math.random()*0.4)+'s';
+    c.style.transform='rotate('+Math.random()*360+'deg)';box.appendChild(c);
+    setTimeout(()=>c.remove(),3200);}
+}
+
+/* 军衔 */
+const ranks=[
+  {min:0,name:'新兵',em:'🪖'},{min:1,name:'上等兵',em:'🎗️'},{min:3,name:'中士',em:'🥉'},
+  {min:5,name:'少尉',em:'🥈'},{min:6,name:'上尉',em:'🥇'},{min:7,name:'探索司令',em:'🎖️'}
+];
+function rankFor(n){let r=ranks[0];ranks.forEach(x=>{if(n>=x.min)r=x;});return r;}
+
+/* 勋章 */
+const badges=[
+  {d:'Day1',nm:'坚持',icon:'🔥',color:'var(--d1)'},
+  {d:'Day2',nm:'守护',icon:'🛡️',color:'var(--d2)'},
+  {d:'Day3',nm:'创造',icon:'🛠️',color:'var(--d3)'},
+  {d:'Day4',nm:'智慧',icon:'💧',color:'var(--d4)'},
+  {d:'Day5',nm:'探索',icon:'🚀',color:'var(--d5)'},
+  {d:'Day6',nm:'担当',icon:'🎖️',color:'var(--d6)'},
+  {d:'Day7',nm:'传承',icon:'🌞',color:'var(--d7)'}
+];
+let lit=JSON.parse(localStorage.getItem('kid_badges')||'{}');
+
+function renderBadges(){
+  document.getElementById('badgeGrid').innerHTML=badges.map(b=>`
+    <div class="badge ${lit['Day_'+b.nm]?'on':''}" id="bg_${b.nm}" style="color:${b.color}">
+      <div class="ring" style="border-color:${b.color}">${b.icon}<span class="lock">🔒</span></div>
+      <div class="day">${b.d}</div><div class="nm">${b.nm}</div>
+    </div>`).join('');
+  updateRankUI();
+}
+function updateRankUI(){
+  const n=Object.values(lit).filter(Boolean).length;
+  const r=rankFor(n);
+  document.getElementById('badgeCount').textContent=n;
+  document.getElementById('badgeBar').style.width=(n/7*100)+'%';
+  document.getElementById('miniXp').style.width=(n/7*100)+'%';
+  document.getElementById('rankName').textContent=r.name+' · LV.'+n;
+  document.getElementById('rankName2').textContent=r.name;
+  document.getElementById('rankEmoji').textContent=r.em;
+  document.getElementById('rankEmoji2').textContent=r.em;
+  document.getElementById('cert').classList.toggle('show',n===7);
+}
+
+/* 关卡数据 */
+const missions=[
+{id:'Day0',accent:'var(--d0)',no:'0',date:'6月30日 周二',code:'铁轨上的出征',theme:'出发',ability:'出征',badge:null,
+ chips:['🎯 定个小目标','🚄 夜车','🌙 出征'],
+ action:['22:00 在武汉登上开往成都的夜车，正式出征！'],
+ intel:[],maps:[['成都东站','成都东站']],
+ brief:'这七天有熊猫、有歼-20、有三星堆、还有火箭。先挑一个——你最想第一个"拿下"哪个？',
+ task:'上车前写下你的 3 个清单：① 最想看的战机 ② 最想看的文物 ③ 最想问爸爸的一个问题。',
+ talk:'如果这趟旅行真是一款游戏，你希望通关之后人物面板上多出哪个技能？',
+ tip:'上车早点睡，养精蓄锐——明天正式登陆成都！'},
+
+{id:'Day1',accent:'var(--d1)',no:'1',date:'7月1日 周三',code:'蜀汉名将集结地',theme:'坚持',ability:'不放弃',badge:'坚持',
+ chips:['🏯 三国','🔥 越输越战','🤝 最强阵容'],
+ action:['12:33 抵达成都东站','13:30 午餐：乐山跷脚牛肉','15:00-17:30 成都武侯祠','18:00 晚餐：武侯祠附近清淡餐，不跑远','20:00 回基地休息'],
+ intel:[['成都武侯祠','三国里最有名的一拨人都"住"在这儿。冷知识：刘备打仗输了一次又一次，地盘丢了好几回，快50岁了还在到处奔波；可关羽、张飞、诸葛亮这些猛人，偏偏死心塌地跟着他。诸葛亮接手时，蜀汉是三国里最弱的一家。']],
+ maps:[['成都东站','成都东站'],['成都武侯祠','成都武侯祠']],
+ brief:'今天当个侦探，逛的时候顺手破三个案子：刘备输了那么多次，为啥不收手回家？为啥那么多厉害的人偏偏选他？最弱的蜀汉，诸葛亮为啥还愿意接？',
+ task:'在武侯祠里挑一个你最服的人，跟队长 Eason 说说为什么是他。',
+ talk:'假如你就是刘备，仗已经输到第 5 次了——回家，还是接着打？说说你的理由。顺便聊聊，你上次打游戏卡关，卡了几次才过？',
+ tip:'第一天火车到站后别排太满，晚餐在武侯祠附近解决，早点回基地，为明天熊猫基地早起攒体力。'},
+
+{id:'Day2',accent:'var(--d2)',no:'2',date:'7月2日 周四',code:'国宝清晨 · 歼-20出击',theme:'守护',ability:'守护',badge:'守护',
+ chips:['🐼 熊猫宝宝','✈️ 歼-20','🔧 几千人造一架'],
+ action:['07:30-11:30 成都大熊猫繁育研究基地','12:00 午餐：成都非遗小吃（清汤龙抄手、蛋烘糕、牛肉锅盔）','14:00-17:00 成飞公园','18:30 晚餐：鲜菌菇汤锅'],
+ intel:[
+   ['成都大熊猫繁育研究基地','熊猫宝宝学走路特别好笑——走两步摔个屁股墩、从树上"出溜"滑下来、翻个跟头爬半天起不来。饲养员说它们一天能摔好几十次，可没一只因此就不爬了。'],
+   ['成飞公园','成都是歼-20的诞生地之一！冷知识：造一架这样的战机，得几千上万人一起干——画图的、拧螺丝的、写代码的、拿命去试飞的……一个零件出错都飞不起来。它能上天，本身就是个奇迹。']],
+ maps:[['成都大熊猫繁育研究基地','成都大熊猫繁育研究基地'],['成飞公园','成飞公园']],
+ brief:'去熊猫基地：偷偷数一数，一只熊猫宝宝多久会摔一次？\n去成飞公园：猜一猜，造一架歼-20大概要多少人参与？（答案能吓你一跳）',
+ task:'找到 3 种熊猫的动作；观察战机的机头、机翼、进气道、导弹挂架；想想为什么一架战机得这么多人一起造。',
+ talk:'如果让你当中国战机的总设计师，你第一个想招进队伍的是什么样的人？卡在一个难题上时，你猜工程师会怎么办？',
+ tip:'熊猫必须早去，7月天热，10:30 后熊猫可能回室内。下午成飞公园注意防晒、补水。'},
+
+{id:'Day3',accent:'var(--d3)',no:'3',date:'7月3日 周五',code:'古蜀黑科技',theme:'创造',ability:'创造力',badge:'创造',
+ chips:['🏺 青铜神树','🥇 黄金面具','🤯 没工具'],
+ action:['08:30-15:00 三星堆博物馆','16:00-17:30 返回成都，基地休息','18:30 晚餐：简阳羊肉汤'],
+ intel:[['三星堆博物馆','三千多年前的古蜀人，没有电、没有机器、连铁都还没怎么用上，却造出两米多高的青铜神树、纯金面具、和你差不多高的青铜大立人。到今天，好多东西科学家都还没完全搞懂他们是怎么做出来的。']],
+ maps:[['三星堆博物馆','三星堆博物馆']],
+ brief:'今天不比谁最值钱，比谁最"离谱"——找出全场你觉得最不可能做出来的那一件。',
+ task:'锁定 3 件最震撼的文物（青铜神树、黄金面具、青铜大立人），告诉爸爸：哪一件最离谱？换成你，给你一堆铜，你做得出来吗？',
+ talk:'猜猜看：那个完美的金面具，古蜀人之前大概做坏了多少个？你觉得他们第一次就成功了吗？',
+ tip:'三星堆信息量超大，别贪多，重点看核心展品。下午回成都后一定回基地休整，别被连续暴晒晒到"没电"。'},
+
+{id:'Day4',accent:'var(--d4)',no:'4',date:'7月4日 周六',code:'水流操控大师',theme:'智慧',ability:'巧劲',badge:'智慧',
+ chips:['💧 2000年还在用','🌊 借水治水','🏙️ 看城市长大'],
+ action:['08:00-13:30 都江堰景区','14:00 午餐：都江堰清蒸江鲜','15:30 返回成都','17:30-20:30 成都博物馆夜场'],
+ intel:[
+   ['都江堰','李冰两千多年前修的，到现在还在用、还在给成都平原浇水！神奇的是它几乎不用电、不用大坝：靠"鱼嘴"把江水分成两半，"飞沙堰"自动甩掉泥沙石头，"宝瓶口"控制进城的水量。洪水来了它不硬挡，反而借着水自己的劲儿来治水。'],
+   ['成都博物馆','这里装着成都几千年是怎么一点点变成今天这样的。"人与自然"展厅里有不少动物、生态和生命演化的展品，挺好逛。']],
+ maps:[['都江堰景区','都江堰景区'],['成都博物馆','成都博物馆']],
+ brief:'去都江堰像破解一个 2000 年前的大机关：搞清楚"鱼嘴、飞沙堰、宝瓶口"各管什么。提示——李冰一点没跟洪水硬刚。\n晚上去成都博物馆，看看这座城几千年是怎么慢慢长成现在的。',
+ task:'画出都江堰"鱼嘴、飞沙堰、宝瓶口"各自的作用图；在成都博物馆挑一个最喜欢的展品，说说它代表成都的哪一面。',
+ talk:'如果让你拦住一条发大水的江，你会修一堵超大的墙硬挡，还是学李冰"借力"？为什么？',
+ tip:'都江堰当天早出发，下午回成都后先休息，再去成都博物馆夜场（有空调，超凉快，适合避暑）。'},
+
+{id:'Day5',accent:'var(--d5)',no:'5',date:'7月5日 周日',code:'冲出大气层',theme:'探索',ability:'好奇心',badge:'探索',
+ chips:['🚀 火箭','🛰️ 空间站','🏠 屋顶被吹飞的诗人'],
+ action:['09:00-12:00 四川科技馆','12:30 午餐：老妈蹄花','14:00-16:30 杜甫草堂','17:30 回基地休息或锦江边散步'],
+ intel:[
+   ['四川科技馆','火箭、空间站、宇宙飞船全在这儿！冷知识：航天员上天前要训练好几年——在水里练、在转椅上转到头晕、把几千个开关背得滚瓜烂熟，光成绩好可去不了。'],
+   ['杜甫草堂','杜甫这哥们一辈子挺惨——打仗、逃难、穷得叮当响。有年秋天大风把他茅草屋顶整个掀飞了。换别人估计当场就炸了，他却写了首诗，说希望天下穷人都能有结实的好房子住。']],
+ maps:[['四川科技馆','四川科技馆'],['杜甫草堂','杜甫草堂']],
+ brief:'去科技馆：今天只锁定三个目标——航天、火箭、空间站，别的随便逛。\n去杜甫草堂前先想一句：要是你家屋顶被大风卷走了，你第一句话会喊啥？等会儿看看杜甫喊的是啥。',
+ task:'在科技馆拿下航天、火箭、空间站三个主题；在杜甫草堂找一句你能看懂的杜甫的诗。',
+ talk:'屋顶都没了还惦记着别人——你觉得杜甫这是傻，还是厉害？换成你会怎么做？',
+ tip:'科技馆控制在 2-3 小时，别贪多。杜甫草堂下午游览注意补水和防晒。'},
+
+{id:'Day6',accent:'var(--d6)',no:'6',date:'7月6日 周一',code:'钢铁与家书',theme:'担当',ability:'担当',badge:'担当',
+ chips:['🎖️ 真家伙','✈️ 飞虎队','✉️ 士兵的家书'],
+ action:['09:00-16:00 大邑·建川博物馆聚落','重点只看 3 个馆：① 抗战文物馆 ② 飞虎队馆 ③ 兵器馆','12:30 午餐：安仁古镇豆腐脑、叶儿粑','17:30 返回成都','晚上：锦江边散步，清汤抄手'],
+ intel:[['建川博物馆聚落','中国最大的民间博物馆群之一，里面全是真东西——打仗时用过的枪、飞虎队的飞机、几十年前的老照片，还有士兵写给家里的信。兵器看着很带劲，旁边那些家书和照片，是真实发生过的事。']],
+ maps:[['建川博物馆聚落','建川博物馆聚落']],
+ brief:'今天这一关有点不一样——适合安静地看。兵器很酷，但它们旁边的照片和信都是真的发生过的事，慢慢逛就好。',
+ task:'重点看三个馆：抗战文物馆、飞虎队馆、兵器馆。挑一件让你一下子安静下来的真东西，记住它长什么样。',
+ talk:'看完聊一个就行：那些当兵的人，写信回家最想说的，会是什么？你觉得他们最想要的，是更厉害的武器，还是别的什么？',
+ tip:'建川馆群很大，千万别全逛。精选三个馆即可，中间安排休息，别让信息过载。'},
+
+{id:'Day7',accent:'var(--d7)',no:'7',date:'7月7日 周二',code:'太阳神鸟 · 凯旋',theme:'传承',ability:'接力',badge:'传承',
+ chips:['🌞 太阳神鸟','✨ 薄如纸的金箔','🏁 凯旋'],
+ action:['09:00-11:30 金沙遗址博物馆','12:00-13:30 午餐：甜皮鸭、开水白菜、清淡川菜','14:00-16:30 成都慢时光：人民公园 / 基地休整 / 文殊院周边轻松走走','17:00-18:00 晚餐：清淡简餐','18:30-19:30 前往成都东站','晚上 乘车/高铁返回武汉'],
+ intel:[['金沙遗址博物馆','金沙比三星堆晚一点，但一看就是"一家人"——也爱黄金、也拜太阳。最有名的"太阳神鸟"金箔，薄得跟纸一样，后来被选成了中国文化遗产的标志。三星堆没有突然消失，它的故事在金沙接着讲了下去。']],
+ maps:[['金沙遗址博物馆','金沙遗址博物馆'],['文殊院','文殊院'],['成都东站','成都东站']],
+ brief:'最后一关，把七天连起来回放一遍：从刘备、熊猫、歼-20，到三星堆、都江堰、火箭、再到金沙——发现没？这片土地上的人，几千年就没停下来过。',
+ task:'回想一遍这趟旅行，把你解锁到的"力量"挑出来：坚持、守护、创造、智慧、探索、担当、传承——哪几个你最有感觉？',
+ talk:'收官 7 问（聊聊就行，不用写作文）：最喜欢哪一天？为什么？哪件文物最震撼？哪个人最想认识？这一路你哪儿不太一样了？重来一次会改啥？以后遇到难事，你最想想起这趟旅行里的哪一天？',
+ tip:'最后一天别再安排重体力景点。以金沙收束，下午轻松休整，晚上从成都东站凯旋回武汉。'}
+];
+function esc(s){return s.replace(/\n/g,'<br>');}
+
+function renderMissions(){
+  document.getElementById('lvList').innerHTML=missions.map(m=>{
+    const done=m.badge?!!lit['Day_'+m.badge]:false;
+    const intelHtml=m.intel.map(s=>`<div class="intel"><div class="nm">📍 ${s[0]}</div><div class="body">${s[1]}</div></div>`).join('');
+    const actHtml='<ul class="action">'+m.action.map(i=>`<li>${i}</li>`).join('')+'</ul>';
+    const mapsHtml='<div class="maps">'+m.maps.map(x=>`<a class="map-btn" target="_blank" rel="noopener" href="https://map.baidu.com/search/${encodeURIComponent(x[1])}" onclick="play('tap')">🗺️ 作战地图：${x[0]}</a>`).join('')+'</div>';
+    const clearBtn=m.badge
+      ?`<button class="clear-btn ${done?'done':''}" id="cb_${m.badge}" style="--accent:${m.accent}" onclick="clearLevel('${m.badge}')">${done?'✅ 关卡已通关 · 勋章「'+m.badge+'」已解锁':'⚔️ 完成关卡 · 解锁勋章「'+m.badge+'」'}</button>`
+      :'';
+    return `
+    <div class="lv-card glow" id="lc_${m.id}" style="--accent:${m.accent}">
+      <div class="lv-head" onclick="toggleLv('${m.id}')">
+        <div class="lv-no"><small>LEVEL</small><b>${m.no}</b></div>
+        <div class="lv-meta">
+          <div class="lvtag">关卡 LV.${m.no}${m.badge?' · 技能 '+m.ability:''}</div>
+          <div class="code-name">「${m.code}」</div>
+          <div class="date">${m.date}</div>
+        </div>
+        <div class="lv-stat">
+          <span class="clear-pill ${done?'done':''}" id="pill_${m.id}">${done?'已通关':'待通关'}</span>
+          <span class="chev">▼</span>
+        </div>
+      </div>
+      <div class="lv-body"><div class="lv-inner">
+        <div class="chips2">${m.chips.map(c=>`<span>${c}</span>`).join('')}</div>
+        <div class="blk"><h4>📡 任务简报</h4><div class="callout">${esc(m.brief)}</div></div>
+        <div class="blk"><h4>🎯 战场行动 · 今日行程</h4>${actHtml}</div>
+        ${intelHtml?`<div class="blk"><h4>🗂️ 情报档案</h4>${intelHtml}</div>`:''}
+        <div class="blk"><h4>⚔️ 实战任务</h4><div class="body">${esc(m.task)}</div></div>
+        <div class="blk"><h4>🌙 夜间通讯</h4><div class="callout">${esc(m.talk)}</div></div>
+        <div class="blk"><h4>🛟 生存贴士</h4><div class="tip">${m.tip}</div></div>
+        ${mapsHtml}
+        ${clearBtn}
+      </div></div>
+    </div>`;
+  }).join('');
+}
+function toggleLv(id){play('tap');document.getElementById('lc_'+id).classList.toggle('open');}
+
+function showLevelup(rank,name){
+  document.getElementById('luIc').textContent=rank.em;
+  document.getElementById('luName').textContent=rank.name;
+  document.getElementById('luDesc').textContent='Even 解锁了勋章「'+name+'」，晋升成功！';
+  document.getElementById('levelup').classList.add('show');
+}
+function closeLevelup(){document.getElementById('levelup').classList.remove('show');}
+
+function clearLevel(name){
+  if(lit['Day_'+name])return;
+  const before=Object.values(lit).filter(Boolean).length;
+  const beforeRank=rankFor(before).name;
+  lit['Day_'+name]=true;
+  localStorage.setItem('kid_badges',JSON.stringify(lit));
+  const cb=document.getElementById('cb_'+name);
+  if(cb){cb.classList.add('done');cb.textContent='✅ 关卡已通关 · 勋章「'+name+'」已解锁';}
+  const mid=missions.find(m=>m.badge===name);
+  if(mid){const p=document.getElementById('pill_'+mid.id);if(p){p.classList.add('done');p.textContent='已通关';}}
+  const el=document.getElementById('bg_'+name);if(el)el.classList.add('on');
+  updateRankUI();confetti();
+  const after=Object.values(lit).filter(Boolean).length;
+  const afterRank=rankFor(after);
+  if(after===7){play('win');document.getElementById('cert').classList.add('show');
+    setTimeout(()=>{showLevelup({em:'🎖️',name:'探索司令'},name);},300);
+    setTimeout(()=>go('#badges'),500);
+  }else if(afterRank.name!==beforeRank){play('unlock');showLevelup(afterRank,name);}
+  else{play('unlock');toast('🏅 解锁勋章「'+name+'」（'+after+'/7）');}
+}
+
+/* 装备背包 */
+const pack=[
+  ['🪪 一、证件与核心物品',['爸爸身份证','儿子身份证 / 户口本原件','火车票/高铁票订单确认','酒店订单截图','景区预约/门票截图','少量现金','银行卡/支付备用方式']],
+  ['👕 二、衣物｜爸爸',['短袖T恤 4-5件','运动短裤 2条','轻薄长裤 1条','防晒衣/皮肤衣 1件','内裤 6-7条 / 一次性内裤','运动袜 6-8双','遮阳帽 1顶','主力运动鞋 1双','凉鞋/拖鞋/洞洞鞋 1双']],
+  ['🧒 三、衣物｜儿子（你的）',['短袖T恤 4-5件','运动短裤 2-3条','轻薄长裤 1条','防晒衣/皮肤衣 1件','内裤 6-7条 / 一次性内裤','运动袜 6-8双','遮阳帽 1顶','主力运动鞋 1双','凉鞋/拖鞋/洞洞鞋 1双']],
+  ['☀️ 四、防晒 · 防雨 · 防蚊',['轻便晴雨伞 1-2把','一次性雨衣 2件以上','SPF50+防晒霜','防蚊喷雾','驱蚊贴','小毛巾/擦汗巾']],
+  ['🔋 五、电子设备',['手机','充电宝','手机充电线','多口充电头','儿童手表/备用联系设备','有线/无线耳机','备用数据线','小型相机/旧手机拍照用']],
+  ['💊 六、医药与个护',['藿香正气液/丸','风油精','止泻药/肠胃药','创可贴','防磨脚贴','口服补液盐','湿纸巾','小包纸巾','免洗洗手液','牙刷牙膏','洗面奶/洗发沐浴小样','指甲剪','塑料袋/密封袋若干']],
+  ['🎖️ 七、我的专属任务装备',['空白盖章本','签字笔/中性笔','轻便双肩包','便携水壶','小望远镜','贴纸奖励','小零食','成都探险手册']],
+  ['🚄 八、火车夜行随身包',['身份证放随身包','手机和充电宝放随身包','纸巾湿巾','水杯','外套/防晒衣','简单零食','儿子盖章本/笔','耳机','一次性洗漱用品','小垃圾袋']],
+  ['✅ 九、出门前最后检查',['门窗关闭','电源/燃气检查','身份证再次确认','手机电量充满','充电宝充满','酒店和车票截图保存','景区预约截图保存','给家人同步行程','父子一起确认：今晚正式出发！']]
+];
+let packState=JSON.parse(localStorage.getItem('kid_pack')||'{}');
+function renderPack(){
+  let total=0;
+  document.getElementById('packList').innerHTML=pack.map((cat,ci)=>{
+    const items=cat[1].map((it,ii)=>{const key=ci+'_'+ii;total++;const on=packState[key]?'on':'';
+      return `<div class="chk ${on}" id="ck_${key}" onclick="togglePack('${key}')"><span class="box">✔</span><span class="lab">${it}</span></div>`;}).join('');
+    return `<div class="pack-cat glow" id="cat_${ci}"><h4 onclick="toggleCat(${ci})">${cat[0]}<span class="ct" id="ct_${ci}"></span><span class="cv">▼</span></h4><div class="pack-items">${items}</div></div>`;
+  }).join('');
+  document.getElementById('packTotal').textContent=total;updatePackStat();
+}
+function updatePackStat(){
+  let total=0,done=0;pack.forEach((cat,ci)=>cat[1].forEach((_,ii)=>{total++;if(packState[ci+'_'+ii])done++;}));
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('packDone').textContent=done;document.getElementById('packPct').textContent=pct+'%';
+  document.getElementById('packBar').style.width=pct+'%';
+  pack.forEach((cat,ci)=>{let d=0;cat[1].forEach((_,ii)=>{if(packState[ci+'_'+ii])d++;});const e=document.getElementById('ct_'+ci);if(e)e.textContent=d+'/'+cat[1].length;});
+}
+function togglePack(key){
+  packState[key]=!packState[key];localStorage.setItem('kid_pack',JSON.stringify(packState));
+  document.getElementById('ck_'+key).classList.toggle('on',!!packState[key]);
+  play('check');updatePackStat();
+}
+function toggleCat(ci){play('tap');document.getElementById('cat_'+ci).classList.toggle('closed');}
+let allClosed=false;
+function toggleAllCats(){allClosed=!allClosed;pack.forEach((_,ci)=>document.getElementById('cat_'+ci).classList.toggle('closed',allClosed));}
+function clearPack(){packState={};localStorage.setItem('kid_pack','{}');document.querySelectorAll('.chk').forEach(c=>c.classList.remove('on'));updatePackStat();toast('🧹 已清空，重新检查装备！');}
+
+/* 军械图鉴 */
+const arsenal=[
+ {cat:'tank',no:'T-01',nm:'99A 主战坦克',desig:'ZTZ-99A',org:'🇨🇳 中国',
+  spec:['125mm 滑膛炮','约 58 吨','公路 ~65km/h','2011 服役'],
+  fact:'中国陆军的"陆战之王"。楔形炮塔上挂满楔形反应装甲，车顶还有激光压制系统，能晃花对面坦克的瞄准镜。',
+  svg:`<svg viewBox="0 0 256 120"><rect x="14" y="80" width="206" height="28" rx="14" fill="#0b1426" stroke="currentColor" stroke-width="3"/><g fill="#060b18" stroke="currentColor" stroke-width="2.4"><circle cx="36" cy="94" r="9"/><circle cx="66" cy="94" r="9"/><circle cx="96" cy="94" r="9"/><circle cx="126" cy="94" r="9"/><circle cx="156" cy="94" r="9"/><circle cx="192" cy="94" r="11"/></g><path d="M16,82 L28,64 L196,64 L222,78 L222,82 Z" fill="#16203a" stroke="currentColor" stroke-width="3"/><path d="M70,64 L150,64 L178,50 L150,36 L96,36 L74,50 Z" fill="#1d2a48" stroke="currentColor" stroke-width="3"/><g fill="currentColor" opacity=".55"><rect x="151" y="42" width="11" height="6"/><rect x="151" y="51" width="11" height="6"/></g><rect x="176" y="45" width="76" height="6" rx="2" fill="#1d2a48" stroke="currentColor" stroke-width="2.4"/><rect x="208" y="42" width="14" height="12" rx="2" fill="#1d2a48" stroke="currentColor" stroke-width="2.4"/><line x1="82" y1="36" x2="78" y2="18" stroke="currentColor" stroke-width="2"/></svg>`},
+ {cat:'tank',no:'T-02',nm:'15 式轻型坦克',desig:'ZTQ-15',org:'🇨🇳 中国',
+  spec:['105mm 线膛炮','约 33 吨','高原利器','2018 服役'],
+  fact:'专门为高原和山地造的轻坦克，跑得快、爬得高，能开到主战坦克上不去的雪山阵地。',
+  svg:`<svg viewBox="0 0 256 120"><rect x="16" y="80" width="196" height="26" rx="13" fill="#0b1426" stroke="currentColor" stroke-width="3"/><g fill="#060b18" stroke="currentColor" stroke-width="2.4"><circle cx="40" cy="93" r="11"/><circle cx="74" cy="93" r="11"/><circle cx="108" cy="93" r="11"/><circle cx="142" cy="93" r="11"/><circle cx="176" cy="93" r="11"/><circle cx="200" cy="93" r="8"/></g><path d="M18,82 L30,68 L188,68 L208,80 L208,82 Z" fill="#16203a" stroke="currentColor" stroke-width="3"/><path d="M78,68 L146,68 L168,56 L146,44 L92,44 L80,56 Z" fill="#1d2a48" stroke="currentColor" stroke-width="3"/><rect x="168" y="52" width="62" height="5" rx="2" fill="#1d2a48" stroke="currentColor" stroke-width="2.2"/><rect x="224" y="50" width="6" height="9" fill="#1d2a48" stroke="currentColor" stroke-width="2"/><line x1="86" y1="44" x2="83" y2="28" stroke="currentColor" stroke-width="2"/></svg>`},
+ {cat:'tank',no:'T-03',nm:'M1A2 艾布拉姆斯',desig:'M1A2 ABRAMS',org:'🇺🇸 美国',
+  spec:['120mm 滑膛炮','约 63 吨','燃气轮机','加速快'],
+  fact:'烧航空煤油的燃气轮机坦克，起步加速像跑车，就是特别费油。认它的窍门：120 炮的炮管中段没有鼓包（没有抽烟装置）。',
+  svg:`<svg viewBox="0 0 256 120"><rect x="12" y="80" width="212" height="26" rx="13" fill="#0b1426" stroke="currentColor" stroke-width="3"/><g fill="#060b18" stroke="currentColor" stroke-width="2.3"><circle cx="30" cy="93" r="8.5"/><circle cx="58" cy="93" r="8.5"/><circle cx="86" cy="93" r="8.5"/><circle cx="114" cy="93" r="8.5"/><circle cx="142" cy="93" r="8.5"/><circle cx="170" cy="93" r="8.5"/><circle cx="200" cy="93" r="8.5"/></g><path d="M14,82 L24,66 L206,66 L214,74 L214,82 Z" fill="#16203a" stroke="currentColor" stroke-width="3"/><path d="M40,66 L150,66 L150,46 L96,46 L40,56 Z" fill="#1d2a48" stroke="currentColor" stroke-width="3"/><rect x="40" y="54" width="44" height="12" fill="#1d2a48" stroke="currentColor" stroke-width="2.3"/><rect x="150" y="50" width="92" height="6" rx="2" fill="#1d2a48" stroke="currentColor" stroke-width="2.3"/><line x1="60" y1="46" x2="56" y2="30" stroke="currentColor" stroke-width="2"/></svg>`},
+ {cat:'tank',no:'T-04',nm:'豹 2A6',desig:'LEOPARD 2A6',org:'🇩🇪 德国',
+  spec:['120mm L55','约 62 吨','炮管超长','射程远'],
+  fact:'德国造，换上了更长的 L55 炮管，打得又远又准，被很多国家买去当主力坦克。',
+  svg:`<svg viewBox="0 0 256 120"><rect x="12" y="80" width="206" height="26" rx="13" fill="#0b1426" stroke="currentColor" stroke-width="3"/><g fill="#060b18" stroke="currentColor" stroke-width="2.3"><circle cx="28" cy="93" r="9"/><circle cx="56" cy="93" r="9"/><circle cx="84" cy="93" r="9"/><circle cx="112" cy="93" r="9"/><circle cx="140" cy="93" r="9"/><circle cx="168" cy="93" r="9"/><circle cx="196" cy="93" r="9"/></g><path d="M14,82 L24,66 L198,66 L216,78 L216,82 Z" fill="#16203a" stroke="currentColor" stroke-width="3"/><path d="M62,66 L150,66 L168,52 L150,40 L86,40 L62,52 Z" fill="#1d2a48" stroke="currentColor" stroke-width="3"/><rect x="168" y="49" width="84" height="5" rx="2" fill="#1d2a48" stroke="currentColor" stroke-width="2.3"/><rect x="244" y="47" width="8" height="9" fill="#1d2a48" stroke="currentColor" stroke-width="2"/><line x1="74" y1="40" x2="71" y2="24" stroke="currentColor" stroke-width="2"/></svg>`},
+ {cat:'tank',no:'T-05',nm:'T-90 主战坦克',desig:'T-90',org:'🇷🇺 俄罗斯',
+  spec:['125mm 滑膛炮','约 46 吨','圆顶炮塔','可发射炮射导弹'],
+  fact:'俄罗斯的主力坦克，炮塔圆乎乎的，身上贴满"接触-5"反应装甲砖，炮管还能直接发射导弹。',
+  svg:`<svg viewBox="0 0 256 120"><rect x="16" y="80" width="200" height="27" rx="13" fill="#0b1426" stroke="currentColor" stroke-width="3"/><g fill="#060b18" stroke="currentColor" stroke-width="2.4"><circle cx="38" cy="94" r="9.5"/><circle cx="70" cy="94" r="9.5"/><circle cx="102" cy="94" r="9.5"/><circle cx="134" cy="94" r="9.5"/><circle cx="166" cy="94" r="9.5"/><circle cx="198" cy="94" r="9.5"/></g><path d="M18,82 L30,66 L196,66 L214,78 L214,82 Z" fill="#16203a" stroke="currentColor" stroke-width="3"/><ellipse cx="112" cy="56" rx="48" ry="16" fill="#1d2a48" stroke="currentColor" stroke-width="3"/><g fill="currentColor" opacity=".5"><rect x="138" y="50" width="9" height="6"/><rect x="148" y="50" width="9" height="6"/><rect x="138" y="58" width="9" height="6"/><rect x="148" y="58" width="9" height="6"/></g><rect x="160" y="53" width="78" height="6" rx="2" fill="#1d2a48" stroke="currentColor" stroke-width="2.4"/><rect x="196" y="50" width="14" height="12" rx="2" fill="#1d2a48" stroke="currentColor" stroke-width="2.4"/></svg>`},
+ {cat:'tank',no:'T-06',nm:'虎式坦克 Tiger I',desig:'PzKpfw VI',org:'🇩🇪 德国 · 二战',
+  spec:['88mm KwK36','约 57 吨','交错负重轮','1942'],
+  fact:'二战德国名坦克，负重轮一层叠一层（交错排列）。88 炮很猛，但太重太娇气，经常自己半路抛锚。',
+  svg:`<svg viewBox="0 0 256 120"><rect x="12" y="78" width="214" height="28" rx="6" fill="#0b1426" stroke="currentColor" stroke-width="3"/><g fill="#060b18" stroke="currentColor" stroke-width="2.2"><circle cx="30" cy="92" r="12"/><circle cx="46" cy="92" r="12"/><circle cx="62" cy="92" r="12"/><circle cx="78" cy="92" r="12"/><circle cx="96" cy="92" r="12"/><circle cx="114" cy="92" r="12"/><circle cx="132" cy="92" r="12"/><circle cx="150" cy="92" r="12"/><circle cx="170" cy="92" r="12"/></g><path d="M14,80 L14,64 L210,64 L210,80 Z" fill="#16203a" stroke="currentColor" stroke-width="3"/><rect x="74" y="42" width="84" height="24" rx="3" fill="#1d2a48" stroke="currentColor" stroke-width="3"/><rect x="158" y="50" width="74" height="6" rx="1" fill="#1d2a48" stroke="currentColor" stroke-width="2.4"/><rect x="230" y="46" width="14" height="14" rx="1" fill="#1d2a48" stroke="currentColor" stroke-width="2.4"/></svg>`},
+ {cat:'rifle',no:'R-01',nm:'95 式自动步枪',desig:'QBZ-95',org:'🇨🇳 中国',
+  spec:['5.8×42mm','无托结构','枪身短','1995'],
+  fact:'中国军队的无托步枪——弹匣装在握把后面，所以整枪特别短，巷战、上下车都灵活，打的是 5.8 毫米子弹。',
+  svg:`<svg viewBox="0 0 240 90"><rect x="26" y="40" width="170" height="20" rx="5" fill="#16203a" stroke="currentColor" stroke-width="3"/><path d="M70,40 L150,40 L150,30 L78,30 Z" fill="#1d2a48" stroke="currentColor" stroke-width="2.5"/><rect x="58" y="30" width="26" height="6" fill="#1d2a48" stroke="currentColor" stroke-width="2"/><path d="M150,60 L162,60 L158,82 L150,82 Z" fill="#1d2a48" stroke="currentColor" stroke-width="2.5"/><rect x="116" y="60" width="20" height="23" rx="2" fill="#16203a" stroke="currentColor" stroke-width="2.5"/><rect x="196" y="46" width="36" height="6" rx="2" fill="#16203a" stroke="currentColor" stroke-width="2.5"/><circle cx="146" cy="68" r="7" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>`},
+ {cat:'rifle',no:'R-02',nm:'AK-47 突击步枪',desig:'AK-47',org:'🇷🇺 苏联',
+  spec:['7.62×39mm','30 发弹匣','超皮实','1949'],
+  fact:'世界上最有名的步枪。那根弯弯的"香蕉弹匣"一眼就能认出来，泡进泥里、灌进沙子还照样能打响。',
+  svg:`<svg viewBox="0 0 240 90"><path d="M28,58 L70,46 L70,58 Z" fill="#1d2a48" stroke="currentColor" stroke-width="2.5"/><rect x="64" y="40" width="84" height="16" rx="3" fill="#16203a" stroke="currentColor" stroke-width="3"/><path d="M92,56 L106,56 L102,76 L92,76 Z" fill="#1d2a48" stroke="currentColor" stroke-width="2.5"/><path d="M112,56 Q116,84 134,86 L140,78 Q122,74 122,56 Z" fill="#16203a" stroke="currentColor" stroke-width="2.5"/><rect x="148" y="44" width="74" height="9" rx="2" fill="#1d2a48" stroke="currentColor" stroke-width="2.5"/><rect x="150" y="36" width="64" height="5" rx="2" fill="#1d2a48" stroke="currentColor" stroke-width="2"/><rect x="206" y="30" width="6" height="16" fill="#1d2a48" stroke="currentColor" stroke-width="2"/><circle cx="99" cy="62" r="7" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>`},
+ {cat:'rifle',no:'R-03',nm:'M4A1 卡宾枪',desig:'M4A1',org:'🇺🇸 美国',
+  spec:['5.56×45mm','伸缩枪托','可加装配件','卡宾枪'],
+  fact:'美军卡宾枪，枪托能伸缩调长短，整把枪像乐高一样模块化——瞄准镜、握把、激光指示器想加就加。',
+  svg:`<svg viewBox="0 0 240 90"><rect x="40" y="46" width="30" height="10" rx="2" fill="#1d2a48" stroke="currentColor" stroke-width="2.5"/><rect x="28" y="48" width="13" height="7" fill="#1d2a48" stroke="currentColor" stroke-width="2"/><rect x="68" y="40" width="78" height="16" rx="3" fill="#16203a" stroke="currentColor" stroke-width="3"/><rect x="74" y="34" width="40" height="5" rx="1" fill="#1d2a48" stroke="currentColor" stroke-width="2"/><path d="M92,56 L106,56 L102,74 L92,74 Z" fill="#1d2a48" stroke="currentColor" stroke-width="2.5"/><rect x="114" y="56" width="16" height="23" rx="2" fill="#16203a" stroke="currentColor" stroke-width="2.5"/><rect x="146" y="44" width="66" height="9" rx="2" fill="#1d2a48" stroke="currentColor" stroke-width="2.5"/><path d="M196,44 L202,30 L208,44 Z" fill="#1d2a48" stroke="currentColor" stroke-width="2"/><rect x="212" y="46" width="16" height="5" rx="1" fill="#1d2a48" stroke="currentColor" stroke-width="2"/><circle cx="99" cy="62" r="7" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>`},
+ {cat:'rifle',no:'R-04',nm:'巴雷特 M82 狙击枪',desig:'M82 / M107',org:'🇺🇸 美国',
+  spec:['12.7×99mm','反器材','射程 ~1.8km','大块头'],
+  fact:'能打穿装甲和墙的"反器材"巨炮，用 12.7 毫米大子弹，配着大号枪口制退器和两脚架，是图鉴里最大的一把枪。',
+  svg:`<svg viewBox="0 0 240 90"><rect x="20" y="40" width="180" height="22" rx="4" fill="#16203a" stroke="currentColor" stroke-width="3"/><rect x="60" y="24" width="80" height="10" rx="3" fill="#1d2a48" stroke="currentColor" stroke-width="2.5"/><rect x="74" y="34" width="6" height="8" fill="#1d2a48" stroke="currentColor" stroke-width="2"/><rect x="120" y="34" width="6" height="8" fill="#1d2a48" stroke="currentColor" stroke-width="2"/><path d="M150,62 L164,62 L160,82 L150,82 Z" fill="#1d2a48" stroke="currentColor" stroke-width="2.5"/><rect x="62" y="62" width="20" height="20" rx="2" fill="#16203a" stroke="currentColor" stroke-width="2.5"/><rect x="200" y="46" width="20" height="10" fill="#16203a" stroke="currentColor" stroke-width="2.5"/><rect x="220" y="44" width="16" height="14" rx="1" fill="#1d2a48" stroke="currentColor" stroke-width="2.5"/><g stroke="#0b1426" stroke-width="2"><line x1="225" y1="46" x2="225" y2="56"/><line x1="230" y1="46" x2="230" y2="56"/></g><line x1="204" y1="62" x2="196" y2="84" stroke="currentColor" stroke-width="2.5"/><line x1="212" y1="62" x2="220" y2="84" stroke="currentColor" stroke-width="2.5"/></svg>`},
+ {cat:'pistol',no:'P-01',nm:'92 式手枪',desig:'QSZ-92',org:'🇨🇳 中国',
+  spec:['9×19mm','15 发弹匣','握感好','配警/军'],
+  fact:'中国警察和军官常用的手枪，弹匣能装很多发，握起来顺手，是国产手枪的代表之一。',
+  svg:`<svg viewBox="0 0 150 100"><rect x="26" y="30" width="96" height="20" rx="4" fill="#16203a" stroke="currentColor" stroke-width="3"/><rect x="116" y="33" width="6" height="6" fill="#1d2a48" stroke="currentColor" stroke-width="1.5"/><rect x="30" y="32" width="5" height="5" fill="#1d2a48" stroke="currentColor" stroke-width="1.5"/><path d="M44,50 L66,50 L60,90 L46,90 Z" fill="#1d2a48" stroke="currentColor" stroke-width="3"/><path d="M70,52 Q72,66 84,66 L84,58 Q78,58 78,52 Z" fill="none" stroke="currentColor" stroke-width="2.5"/><rect x="46" y="86" width="16" height="6" rx="1" fill="#1d2a48" stroke="currentColor" stroke-width="2"/></svg>`},
+ {cat:'pistol',no:'P-02',nm:'沙漠之鹰',desig:'DESERT EAGLE',org:'🇮🇱 以色列/美国',
+  spec:['.50 AE','导气式','后坐力大','大手炮'],
+  fact:'又大又重的"手炮"，靠导气结构发射超猛的大子弹。电影里特别爱用它，但真打起来后坐力很大，不好控制。',
+  svg:`<svg viewBox="0 0 150 100"><polygon points="24,34 132,34 132,30 116,26 40,26 30,30" fill="#1d2a48" stroke="currentColor" stroke-width="2.5"/><rect x="24" y="34" width="108" height="22" rx="3" fill="#16203a" stroke="currentColor" stroke-width="3"/><circle cx="128" cy="45" r="3.5" fill="#0b1426" stroke="currentColor" stroke-width="1.5"/><path d="M44,56 L70,56 L64,94 L46,94 Z" fill="#1d2a48" stroke="currentColor" stroke-width="3"/><path d="M74,58 Q76,74 90,74 L90,66 Q82,66 82,58 Z" fill="none" stroke="currentColor" stroke-width="2.5"/><rect x="46" y="90" width="18" height="6" rx="1" fill="#1d2a48" stroke="currentColor" stroke-width="2"/></svg>`},
+ {cat:'air',no:'A-01',nm:'歼-20 隐身战机',desig:'J-20',org:'🇨🇳 中国',
+  spec:['双发隐身','鸭式布局','第五代','2017 服役'],
+  fact:'中国的第五代隐身战斗机。前面一对小"鸭翼"加上大三角翼的造型很好认，雷达很难发现它。这次旅行成飞公园讲的就是它的"老家"。',
+  svg:`<svg viewBox="0 0 160 200"><path d="M80,8 L88,60 L96,96 L84,150 L76,150 L64,96 L72,60 Z" fill="#16203a" stroke="currentColor" stroke-width="3"/><path d="M86,70 L120,84 L118,92 L88,86 Z" fill="#1d2a48" stroke="currentColor" stroke-width="2.5"/><path d="M74,70 L40,84 L42,92 L72,86 Z" fill="#1d2a48" stroke="currentColor" stroke-width="2.5"/><path d="M90,104 L150,150 L150,162 L88,134 Z" fill="#1d2a48" stroke="currentColor" stroke-width="3"/><path d="M70,104 L10,150 L10,162 L72,134 Z" fill="#1d2a48" stroke="currentColor" stroke-width="3"/><path d="M86,140 L104,176 L96,178 L84,150 Z" fill="#16203a" stroke="currentColor" stroke-width="2.5"/><path d="M74,140 L56,176 L64,178 L76,150 Z" fill="#16203a" stroke="currentColor" stroke-width="2.5"/><rect x="74" y="150" width="5" height="30" fill="#0b1426" stroke="currentColor" stroke-width="2"/><rect x="81" y="150" width="5" height="30" fill="#0b1426" stroke="currentColor" stroke-width="2"/></svg>`},
+ {cat:'air',no:'A-02',nm:'东风-17 导弹',desig:'DF-17',org:'🇨🇳 中国',
+  spec:['高超音速','乘波体弹头','机动变轨','难拦截'],
+  fact:'带"乘波体"滑翔弹头的导弹，那个扁扁的楔形头能在大气层边缘高速滑翔、还能拐弯变轨，所以非常难被拦截。',
+  svg:`<svg viewBox="0 0 240 90"><path d="M150,34 L226,46 L226,52 L150,56 Z" fill="#1d2a48" stroke="currentColor" stroke-width="2.5"/><rect x="40" y="40" width="120" height="16" rx="8" fill="#16203a" stroke="currentColor" stroke-width="3"/><path d="M40,40 L24,44 L24,52 L40,56 Z" fill="#16203a" stroke="currentColor" stroke-width="2.5"/><path d="M44,40 L34,26 L52,40 Z" fill="#1d2a48" stroke="currentColor" stroke-width="2"/><path d="M44,56 L34,70 L52,56 Z" fill="#1d2a48" stroke="currentColor" stroke-width="2"/><g fill="currentColor" opacity=".4"><circle cx="70" cy="48" r="3"/><circle cx="92" cy="48" r="3"/></g></svg>`}
+];
+const arsCatList=[['all','全部 ALL'],['tank','坦克 / 装甲'],['rifle','步枪'],['pistol','手枪'],['air','战机 / 导弹']];
+const arsAccent={tank:'var(--gold)',rifle:'var(--cyber)',pistol:'var(--green)',air:'var(--cyber2)'};
+let arsStudied=JSON.parse(localStorage.getItem('kid_arsenal')||'{}');
+let arsFilter='all';
+function renderArsCats(){
+  document.getElementById('arsCats').innerHTML=arsCatList.map(c=>`<div class="ars-cat ${c[0]===arsFilter?'active':''}" onclick="setArsFilter('${c[0]}')">${c[1]}</div>`).join('');
+}
+function setArsFilter(f){arsFilter=f;play('tap');renderArsCats();renderArsGrid();}
+function renderArsGrid(){
+  const list=arsenal.filter(a=>arsFilter==='all'||a.cat===arsFilter);
+  document.getElementById('arsGrid').innerHTML=list.map(a=>{
+    const i=arsenal.indexOf(a);const s=!!arsStudied[a.no];
+    return `<div class="ars-card ${s?'studied open':''}" id="ars_${i}" style="--accent:${arsAccent[a.cat]}" onclick="studyArs(${i})">
+      <div class="lockbadge">${s?'✓ 已研究':'🔒 未研究'}</div>
+      <div class="tagno">${a.no}</div>
+      <div class="ars-svg">${a.svg}</div>
+      <div class="nm">${a.nm}</div>
+      <div class="desig">${a.desig}</div>
+      <div class="org">${a.org}</div>
+      <div class="ars-spec">${a.spec.map(x=>`<span>${x}</span>`).join('')}</div>
+      <div class="more" id="arsmore_${i}">${s?'▾ 冷知识':'▸ 点击研究'}</div>
+      <div class="ars-fact">${a.fact}</div>
+    </div>`;
+  }).join('');
+  updateArsStat();
+}
+function studyArs(i){
+  const a=arsenal[i],card=document.getElementById('ars_'+i);
+  card.classList.toggle('open');
+  const more=document.getElementById('arsmore_'+i);
+  if(more)more.textContent=card.classList.contains('open')?'▾ 冷知识':'▸ 点击研究';
+  if(!arsStudied[a.no]){
+    arsStudied[a.no]=true;localStorage.setItem('kid_arsenal',JSON.stringify(arsStudied));
+    card.classList.add('studied');
+    const lb=card.querySelector('.lockbadge');if(lb)lb.textContent='✓ 已研究';
+    updateArsStat();
+    const n=Object.values(arsStudied).filter(Boolean).length;
+    if(n===arsenal.length){play('win');confetti();toast('🏆 军械图鉴全部解锁！军械大师达成！');}
+    else{play('unlock');toast('🔎 已研究：'+a.nm+'（'+n+'/'+arsenal.length+'）');}
+  }else{play('tap');}
+}
+function updateArsStat(){
+  const n=Object.values(arsStudied).filter(Boolean).length;
+  document.getElementById('arsCount').textContent=n;
+  document.getElementById('arsTotal').textContent=arsenal.length;
+  document.getElementById('arsBar').style.width=(n/arsenal.length*100)+'%';
+}
+function renderArsenal(){renderArsCats();renderArsGrid();}
+
+/* 初始化 */
+renderBadges();renderMissions();renderPack();renderArsenal();
+</script>
+</body>
+</html>
