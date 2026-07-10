@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE AI · 锻造AI训战营 — 面向个人与组织的AI能力建设平台</title>
+<style>
+:root{
+  --bg-dark:#05070A; --bg-dark2:#0A0E14; --bg-light:#F5F7FA; --bg-white:#FFFFFF;
+  --tx-d:#FFFFFF; --tx-d-sub:#8A939E; --tx-l:#101318; --tx-l-sub:#5F6873;
+  --blue:#4F8DFF; --green:#62F6B7; --card-d:#0D1219; --line-d:rgba(255,255,255,.08); --line-l:#E6EAF0;
+  --r:14px; --nav-h:64px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,-apple-system,"Inter","HarmonyOS Sans SC","Noto Sans SC","Microsoft YaHei",sans-serif;background:var(--bg-dark);color:var(--tx-d);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none}
+.wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+/* ---------- NAV ---------- */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);background:rgba(5,7,10,.72);border-bottom:1px solid var(--line-d)}
+.nav-in{max-width:1240px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;gap:28px}
+.logo{display:flex;align-items:baseline;gap:10px;cursor:pointer;flex-shrink:0}
+.logo b{font-size:19px;letter-spacing:.5px}
+.logo b i{color:var(--blue);font-style:normal}
+.logo span{font-size:11.5px;color:var(--tx-d-sub)}
+.nav-links{display:flex;gap:4px;flex:1;justify-content:center}
+.nav-links a{font-size:14px;color:var(--tx-d-sub);padding:8px 13px;border-radius:8px;transition:.3s;cursor:pointer;white-space:nowrap}
+.nav-links a:hover{color:#fff;background:rgba(255,255,255,.06)}
+.nav-links a.on{color:#fff}
+.btn{display:inline-block;padding:11px 22px;border-radius:10px;font-size:14.5px;font-weight:600;transition:all .35s;cursor:pointer;text-align:center}
+.btn-p{background:var(--blue);color:#fff}
+.btn-p:hover{background:#3d7df2;transform:translateY(-1px);box-shadow:0 8px 24px rgba(79,141,255,.35)}
+.btn-o{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.25)}
+.btn-o:hover{border-color:#fff;background:rgba(255,255,255,.06)}
+.btn-ol{background:transparent;color:var(--tx-l);border:1px solid #C9D2DE}
+.btn-ol:hover{border-color:var(--blue);color:var(--blue)}
+.nav-cta{padding:9px 18px;font-size:13.5px;flex-shrink:0}
+.burger{display:none;background:none;color:#fff;font-size:22px;flex-shrink:0}
+.m-menu{display:none;position:fixed;top:var(--nav-h);left:0;right:0;z-index:99;background:rgba(5,7,10,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--line-d);padding:12px 24px 20px}
+.m-menu a{display:block;padding:13px 8px;font-size:15px;color:#dfe5ec;border-bottom:1px solid var(--line-d);cursor:pointer}
+/* ---------- SECTIONS ---------- */
+.page{display:none}
+.page.show{display:block}
+section{padding:96px 0}
+.dark{background:var(--bg-dark);color:var(--tx-d)}
+.dark2{background:var(--bg-dark2);color:var(--tx-d)}
+.light{background:var(--bg-light);color:var(--tx-l)}
+.white{background:var(--bg-white);color:var(--tx-l)}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;letter-spacing:2px;color:var(--blue);text-transform:uppercase;margin-bottom:18px}
+.kicker::before{content:"";width:22px;height:1.5px;background:var(--blue)}
+h1{font-size:52px;line-height:1.22;font-weight:700;letter-spacing:-.5px}
+h2{font-size:36px;line-height:1.3;font-weight:700;letter-spacing:-.3px;margin-bottom:14px}
+h3{font-size:19px;font-weight:700}
+.sub{font-size:17px;color:var(--tx-d-sub);max-width:640px}
+.light .sub,.white .sub{color:var(--tx-l-sub)}
+.center{text-align:center}
+.center .sub{margin:0 auto}
+/* ---------- HERO ---------- */
+.hero{min-height:calc(100vh - 0px);display:flex;align-items:center;position:relative;overflow:hidden;padding-top:var(--nav-h)}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 45% at 50% 0%,rgba(79,141,255,.14),transparent 65%),radial-gradient(ellipse 40% 35% at 82% 85%,rgba(98,246,183,.05),transparent 60%)}
+.hero-in{position:relative;text-align:center;max-width:860px;margin:0 auto;padding:80px 24px}
+.hero-badge{display:inline-block;padding:7px 16px;border:1px solid rgba(79,141,255,.4);border-radius:999px;font-size:13px;color:#A9C6FF;margin-bottom:30px;background:rgba(79,141,255,.08)}
+.hero p.lead{font-size:19px;color:#B7C0CB;margin:26px auto 14px;max-width:620px}
+.hero p.note{font-size:14.5px;color:var(--tx-d-sub);max-width:640px;margin:0 auto 40px}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.chips{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:56px}
+.chip{font-size:13px;color:#AEB7C2;padding:8px 16px;border:1px solid var(--line-d);border-radius:999px;background:rgba(255,255,255,.03)}
+.chip::before{content:"● ";color:var(--green);font-size:9px;vertical-align:1.5px}
+.pulse{width:9px;height:9px;border-radius:50%;background:var(--green);display:inline-block;animation:pu 2.6s ease-in-out infinite}
+@keyframes pu{0%,100%{opacity:.5;transform:scale(.9)}50%{opacity:1;transform:scale(1.15)}}
+/* ---------- GRID/CARDS ---------- */
+.grid{display:grid;gap:20px;margin-top:52px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.card{border-radius:var(--r);padding:30px 28px;transition:all .4s}
+.dark .card,.dark2 .card{background:var(--card-d);border:1px solid var(--line-d)}
+.dark .card:hover,.dark2 .card:hover{border-color:rgba(79,141,255,.45);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.5)}
+.light .card,.white .card{background:#fff;border:1px solid var(--line-l);box-shadow:0 1px 3px rgba(16,19,24,.05)}
+.light .card:hover,.white .card:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(16,19,24,.09);border-color:#C7D6F5}
+.card .ic{width:42px;height:42px;border-radius:11px;background:rgba(79,141,255,.12);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;margin-bottom:18px}
+.card h3{margin-bottom:10px}
+.card p{font-size:14px;color:var(--tx-d-sub)}
+.light .card p,.white .card p{color:var(--tx-l-sub)}
+.card .link{display:inline-block;margin-top:16px;font-size:13.5px;font-weight:600;color:var(--blue);cursor:pointer}
+.card .link::after{content:" →";transition:.3s}
+.card .link:hover::after{margin-left:4px}
+/* ---------- ENGINE MODEL ---------- */
+.engine-wrap{margin-top:56px}
+.engines{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.engine{border-radius:var(--r);padding:34px 30px;text-align:center;border:1px solid rgba(79,141,255,.35);background:linear-gradient(180deg,rgba(79,141,255,.09),rgba(79,141,255,.02))}
+.engine.g{border-color:rgba(98,246,183,.3);background:linear-gradient(180deg,rgba(98,246,183,.07),rgba(98,246,183,.015))}
+.engine .tag{font-size:13px;font-weight:600;color:var(--blue);letter-spacing:1px}
+.engine.g .tag{color:var(--green)}
+.engine .big{font-size:40px;font-weight:800;letter-spacing:8px;margin:10px 0 6px}
+.engine .exp{font-size:13px;color:var(--tx-d-sub)}
+.chassis{margin-top:20px;border:1px solid rgba(255,255,255,.14);border-radius:var(--r);padding:22px 30px;display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap;background:rgba(255,255,255,.025)}
+.chassis b{font-size:20px;letter-spacing:5px}
+.chassis span{font-size:13px;color:var(--tx-d-sub)}
+.motto{text-align:center;margin-top:30px;font-size:16px;color:#B7C0CB}
+.motto b{color:var(--green)}
+/* ---------- STAGES ---------- */
+.stages{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:52px}
+.stage{position:relative;background:#fff;border:1px solid var(--line-l);border-radius:var(--r);padding:28px 24px}
+.stage .no{font-size:13px;font-weight:700;color:var(--blue);letter-spacing:1px}
+.stage h3{margin:8px 0 10px;font-size:21px}
+.stage p{font-size:13.5px;color:var(--tx-l-sub)}
+.stage::after{content:"→";position:absolute;right:-14px;top:44%;color:#B9C4D4;font-size:18px;z-index:2}
+.stage:last-child::after{display:none}
+/* ---------- STRIPS ---------- */
+.strip{margin-top:52px;border-radius:var(--r);padding:26px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.light .strip,.white .strip{background:linear-gradient(90deg,#EAF1FF,#F2FBF7);border:1px solid #D8E4F8}
+.strip h3{font-size:17px}
+.strip p{font-size:13.5px;color:var(--tx-l-sub);margin-top:4px}
+.rights{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.right-tag{font-size:12.5px;padding:7px 14px;border-radius:999px;background:#EEF3FA;border:1px solid var(--line-l);color:var(--tx-l-sub)}
+/* ---------- TIMELINE (enterprise) ---------- */
+.steps{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:48px}
+.step{border:1px solid var(--line-d);border-radius:12px;padding:20px 14px;text-align:center;background:var(--card-d)}
+.step .n{width:30px;height:30px;margin:0 auto 10px;border-radius:50%;background:rgba(79,141,255,.15);color:var(--blue);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+.step h4{font-size:14.5px;margin-bottom:4px}
+.step p{font-size:11.5px;color:var(--tx-d-sub);line-height:1.5}
+/* ---------- CASE CARDS ---------- */
+.case .meta{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.case .meta span{font-size:11.5px;padding:4px 11px;border-radius:999px;background:#EEF3FA;color:var(--tx-l-sub)}
+.case .quote{font-size:13.5px;color:var(--tx-l-sub);border-left:3px solid var(--blue);padding-left:12px;margin-top:14px;font-style:italic}
+.verify{font-size:12.5px;color:var(--tx-l-sub);margin-top:34px;text-align:center}
+.verify b{color:#1D7A55}
+/* ---------- CTA / FOOTER ---------- */
+.final{padding:110px 0;text-align:center;position:relative;overflow:hidden}
+.final::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 55% 60% at 50% 100%,rgba(79,141,255,.15),transparent 65%)}
+.final>*{position:relative}
+footer{background:var(--bg-dark);border-top:1px solid var(--line-d);padding:52px 0 40px;color:var(--tx-d-sub);font-size:13px}
+.foot{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}
+.foot .cols{display:flex;gap:64px;flex-wrap:wrap}
+.foot h5{color:#fff;font-size:13.5px;margin-bottom:12px}
+.foot a{display:block;padding:4px 0;color:var(--tx-d-sub);cursor:pointer;transition:.3s}
+.foot a:hover{color:#fff}
+.foot-note{margin-top:36px;padding-top:22px;border-top:1px solid var(--line-d);font-size:12px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+/* ---------- MODAL ---------- */
+.modal-bg{display:none;position:fixed;inset:0;z-index:200;background:rgba(3,5,8,.7);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px}
+.modal-bg.open{display:flex}
+.modal{background:#fff;color:var(--tx-l);border-radius:18px;max-width:460px;width:100%;padding:36px 34px;position:relative;animation:mi .4s cubic-bezier(.2,.8,.3,1)}
+@keyframes mi{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+.modal h3{font-size:21px;margin-bottom:8px}
+.modal .mp{font-size:13.5px;color:var(--tx-l-sub);margin-bottom:20px}
+.modal input,.modal select,.modal textarea{width:100%;padding:12px 14px;border:1px solid #D6DEE9;border-radius:10px;font-size:14px;font-family:inherit;margin-bottom:12px;outline:none;transition:.3s;background:#FAFBFD}
+.modal input:focus,.modal select:focus,.modal textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(79,141,255,.15)}
+.modal .x{position:absolute;top:16px;right:18px;background:none;font-size:20px;color:#9AA5B1}
+.modal .ok{display:none;text-align:center;padding:26px 0 10px}
+.modal .ok .tick{width:54px;height:54px;margin:0 auto 16px;border-radius:50%;background:#E9FBF3;color:#17A56C;font-size:26px;display:flex;align-items:center;justify-content:center}
+/* ---------- ANIM ---------- */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.rv.in{opacity:1;transform:none}
+/* ---------- KB ---------- */
+.kb-cat{display:flex;gap:10px;flex-wrap:wrap;margin:40px 0 8px}
+.kb-cat button{padding:9px 18px;border-radius:999px;border:1px solid var(--line-l);background:#fff;font-size:13.5px;color:var(--tx-l-sub);transition:.3s}
+.kb-cat button.on,.kb-cat button:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+.kb-item{padding:22px 4px;border-bottom:1px solid var(--line-l);display:flex;justify-content:space-between;gap:18px;align-items:baseline;cursor:pointer;transition:.3s}
+.kb-item:hover h4{color:var(--blue)}
+.kb-item h4{font-size:16px;transition:.3s}
+.kb-item p{font-size:13px;color:var(--tx-l-sub);margin-top:4px}
+.kb-item span{font-size:12px;color:#93A0AF;white-space:nowrap}
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:960px){
+  .nav-links{display:none}.burger{display:block;margin-left:auto}.nav-cta{display:none}
+  h1{font-size:34px}h2{font-size:27px}
+  .g3,.g4,.g2{grid-template-columns:1fr}
+  .stages{grid-template-columns:1fr}.stage::after{display:none}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .engines{grid-template-columns:1fr}
+  section{padding:64px 0}
+  .hero-in{padding:60px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<nav>
+  <div class="nav-in">
+    <div class="logo" onclick="go('home')"><b>FORGE <i>AI</i></b><span>锻造AI训战营</span></div>
+    <div class="nav-links">
+      <a data-p="path" onclick="go('path')">学习路径</a>
+      <a data-p="courses" onclick="go('courses')">课程体系</a>
+      <a data-p="outcomes" onclick="go('outcomes')">学员成果</a>
+      <a data-p="community" onclick="go('community')">FORGE社区</a>
+      <a data-p="enterprise" onclick="go('enterprise')">企业服务</a>
+      <a data-p="kb" onclick="go('kb')">AI知识库</a>
+      <a data-p="about" onclick="go('about')">关于我们</a>
+    </div>
+    <button class="btn btn-p nav-cta" onclick="openModal('c')">预约学习咨询</button>
+    <button class="burger" onclick="toggleMenu()">☰</button>
+  </div>
+</nav>
+<div class="m-menu" id="mMenu">
+  <a onclick="go('path')">学习路径</a><a onclick="go('courses')">课程体系</a><a onclick="go('outcomes')">学员成果</a>
+  <a onclick="go('community')">FORGE社区</a><a onclick="go('enterprise')">企业服务</a><a onclick="go('kb')">AI知识库</a>
+  <a onclick="go('about')">关于我们</a><a onclick="openModal('c')" style="color:#4F8DFF;font-weight:600">预约学习咨询</a>
+</div>
+
+<main>
+<!-- ================= HOME ================= -->
+<div class="page show" id="page-home">
+
+  <!-- S1 HERO -->
+  <div class="hero dark">
+    <div class="hero-in">
+      <div class="hero-badge rv">面向个人与组织的 AI 能力建设平台</div>
+      <h1 class="rv">人人都应该拥有<br>自己的 AI 能力。</h1>
+      <p class="lead rv">不只是学会几个工具，而是建立一套持续解决问题、创造价值的能力系统。</p>
+      <p class="note rv">FORGE AI 面向零基础学习者、职场人士、创业者和组织团队，通过线下训战、线上陪跑与真实项目实践，帮助你把 AI 真正用进工作、经营与生活。</p>
+      <div class="hero-btns rv">
+        <button class="btn btn-p" onclick="go('path')">查看学习路径</button>
+        <button class="btn btn-o" onclick="go('about')">了解 FORGE AI</button>
+      </div>
+      <div class="chips rv">
+        <span class="chip">零基础可学</span><span class="chip">真实场景训练</span><span class="chip">7天不满意可退（以协议为准）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- S2 THE SHIFT -->
+  <section class="dark2">
+    <div class="wrap">
+      <div class="kicker rv">THE SHIFT · 正在发生的变化</div>
+      <h2 class="rv">AI 不只是多了一个工具，<br>它正在改变我们完成工作的方式。</h2>
+      <p class="sub rv">真正重要的，不是追逐每一个新工具，而是学会如何与 AI 协作、判断和创造。</p>
+      <div class="grid g4">
+        <div class="card rv"><div class="ic">工</div><h3>工作</h3><p>从亲自完成每一步，到学会与 AI 分工协作。人的价值更多体现在目标、判断、审美、创造和责任承担上。</p></div>
+        <div class="card rv"><div class="ic">创</div><h3>创业</h3><p>小团队也能拥有过去只有大团队才具备的能力。AI 不会自动带来成功，但显著降低尝试和验证的成本。</p></div>
+        <div class="card rv"><div class="ic">学</div><h3>学习</h3><p>每个人都可获得更及时、更个性化的学习辅助。但学习者仍需独立判断，AI 的答案不等于事实。</p></div>
+        <div class="card rv"><div class="ic">组</div><h3>组织</h3><p>有效的企业 AI，不是购买几个账号，而是识别高价值场景、建立规范、沉淀流程和组织知识。</p></div>
+      </div>
+      <p class="motto rv">未来真正拉开差距的，不是谁最早听说 AI，而是谁更早把 AI 变成<b>稳定的能力</b>。</p>
+    </div>
+  </section>
+
+  <!-- S3 METHOD -->
+  <section class="dark">
+    <div class="wrap">
+      <div class="kicker rv">FORGE METHOD · 方法论</div>
+      <h2 class="rv">不是多学几个工具，<br>而是建立一套持续进化的 AI 能力系统。</h2>
+      <p class="sub rv">FORGE 原创「锻造 · AI时代能力双引擎」：九个字，把所有零散技巧串成一套能力框架。</p>
+      <div class="engine-wrap rv">
+        <div class="engines">
+          <div class="engine"><div class="tag">左引擎 · 人类能力</div><div class="big">想 拆 挑</div><div class="exp">想得出（创造力）· 拆得开（体系）· 挑得准（审美）</div></div>
+          <div class="engine g"><div class="tag" style="color:var(--green)">右引擎 · AI 能力</div><div class="big">场 料 法</div><div class="exp">用对场合（场景）· 喂对材料（数据）· 使对方法（基本功）</div></div>
+        </div>
+        <div class="chassis"><span class="pulse"></span><b>真 · 界 · 稳</b><span>安全底盘：事实核对 · 边界与责任 · 流程可复现 —— 每次交付，落地必检查</span></div>
+        <p class="motto">AI 管生成，人管判断，底盘管验收 —— <b>双引擎管飞得快，安全底盘管落得稳。</b></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- S4 WHO -->
+  <section class="light">
+    <div class="wrap">
+      <div class="kicker rv">WHO IS IT FOR · 找到起点</div>
+      <h2 class="rv">无论你现在处于哪个阶段，<br>都可以找到适合自己的起点。</h2>
+      <div class="grid g4">
+        <div class="card rv"><div class="ic">01</div><h3>AI 入门者</h3><p>第一次系统学习 AI？从基础认知、对话方法和常用工具开始，建立正确、安全、稳定的使用习惯。</p><span class="link" onclick="go('path')">探索 AI 入门路径</span></div>
+        <div class="card rv"><div class="ic">02</div><h3>职场与管理者</h3><p>围绕资料整理、文案、汇报、分析、会议和协作，找到适合自己的 AI 工作方式。</p><span class="link" onclick="go('path')">查看职场应用路径</span></div>
+        <div class="card rv"><div class="ic">03</div><h3>创业者与经营者</h3><p>用 AI 辅助内容、营销、客户沟通、产品验证与数据分析，提高小团队经营效率。</p><span class="link" onclick="go('path')">查看商业应用路径</span></div>
+        <div class="card rv"><div class="ic">04</div><h3>企业与公共组织</h3><p>面向企业、园区、协会和公共组织，提供 AI 通识培训、岗位训战、应用共创与项目交付。</p><span class="link" onclick="go('enterprise')">了解企业服务</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S5 ROADMAP -->
+  <section class="white">
+    <div class="wrap">
+      <div class="kicker rv">LEARNING ROADMAP · 成长路径</div>
+      <h2 class="rv">从会对话，到会创造。</h2>
+      <p class="sub rv">零基础学习 AI，不需要一开始掌握复杂技术。真正有效的学习，是从一个个真实问题开始，逐步建立能力。</p>
+      <div class="stages">
+        <div class="stage rv"><div class="no">STAGE 01</div><h3>会对话</h3><p>清晰表达需求，让 AI 理解你的目标：描述背景、明确任务、要求格式、持续追问、检查答案。</p></div>
+        <div class="stage rv"><div class="no">STAGE 02</div><h3>会使用</h3><p>用不同类型的 AI 工具解决具体问题：文字、搜索、图像、表格、文档与办公场景。</p></div>
+        <div class="stage rv"><div class="no">STAGE 03</div><h3>会搭建</h3><p>把工具组合成可重复使用的流程：提示词资产、知识库、智能体与自动化工作流。</p></div>
+        <div class="stage rv"><div class="no">STAGE 04</div><h3>会创造</h3><p>将 AI 能力转化为作品、项目和真实业务成果，用作品证明能力。</p></div>
+      </div>
+      <p class="verify rv">不是所有人都需要成为程序员，但每个人都应该学会<b style="color:var(--blue)">指挥 AI 完成任务</b>。</p>
+    </div>
+  </section>
+
+  <!-- S6 OUTCOMES -->
+  <section class="light">
+    <div class="wrap">
+      <div class="kicker rv">REAL OUTCOMES · 真实成果</div>
+      <h2 class="rv">不只证明学过，更要证明做出来了。</h2>
+      <p class="sub rv">每个学员作品按「真 · 界 · 稳」标准验收：信息经核对、使用在边界内、成果可复现。</p>
+      <div class="grid g3">
+        <div class="card case rv"><div class="meta"><span>市场文案 · 职场</span><span>AI 内容创作</span></div><h3>从执行者到导演</h3><p>系统学习 AI 写作后，一人承担过去三人的内容产出，负责调教、判断与终审打磨。</p><div class="quote">“工具只会淘汰不愿进化的做法，不会消灭职业本身。”</div></div>
+        <div class="card case rv"><div class="meta"><span>宝妈 · 家庭教育</span><span>AI 智能体</span></div><h3>作业辅导小助手</h3><p>搭建“讲步骤、不给答案”的辅导智能体，让 AI 当老师不当枪手，孩子自己推导答案。</p><div class="quote">“自己想通的才长在脑子里。”</div></div>
+        <div class="card case rv"><div class="meta"><span>区域医院 · 组织应用</span><span>AI 工作流</span></div><h3>随访辅助智能体</h3><p>常规回访由智能体承担，护士专注复杂病例；红线设计：一次投诉即失败、无授权不给用药建议。</p><div class="quote">“下限可控，比上限聪明更重要。”</div></div>
+      </div>
+      <p class="verify rv">所有案例：<b>真实学员 · 真实过程 · 真实作品 · 本人授权 · 不夸大效果</b>（效果因个体与行业条件而异）</p>
+      <div class="center" style="margin-top:36px"><button class="btn btn-ol rv" onclick="go('outcomes')">查看全部学员作品</button></div>
+    </div>
+  </section>
+
+  <!-- S7 COURSES -->
+  <section class="white">
+    <div class="wrap">
+      <div class="kicker rv">COURSES & PRACTICE · 课程与实践</div>
+      <h2 class="rv">从理解，到实践，再到持续成长。</h2>
+      <div class="strip rv">
+        <div><h3>🎓 AI 公开体验课 · 3小时</h3><p>公益科普定位：认知破局 + 防骗安全 + 现场搭建你的第一个智能体 —— 先体验，再决定。</p></div>
+        <button class="btn btn-p" onclick="openModal('c')">预约最近一期体验课</button>
+      </div>
+      <div class="grid g3">
+        <div class="card rv"><div class="ic">L1</div><h3>FORGE AI 零基础训战营</h3><p>两天两夜线下集训。AI 认知、提示词基本功、工具全景、场景实操 —— 结营带走你的第一批真实作品。</p><span class="link" onclick="openModal('c')">查看开课安排</span></div>
+        <div class="card rv"><div class="ic">L2</div><h3>AI 场景应用进阶</h3><p>办公提效、内容营销、电商、个人品牌、数据分析 —— 把 AI 嵌入你的真实工作流程。</p><span class="link" onclick="openModal('c')">查看开课安排</span></div>
+        <div class="card rv"><div class="ic">L3</div><h3>AI 工作流与智能体实践</h3><p>提示词资产、知识库、智能体、自动化工作流 —— 把零散工具整合成可复用的解决方案。</p><span class="link" onclick="openModal('c')">查看开课安排</span></div>
+      </div>
+      <div class="rights rv">
+        <span class="right-tag">线下训战营</span><span class="right-tag">全年线上实时交互课</span><span class="right-tag">主流大模型学习权限（以当期服务为准）</span><span class="right-tag">社群陪跑一年</span><span class="right-tag">学员硬件权益</span><span class="right-tag" style="border-color:#B9E6D0;background:#EFFBF5;color:#1D7A55">线下开营 7 天内不满意可退（以协议为准）</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- S8 TEAM & COMMUNITY -->
+  <section class="light">
+    <div class="wrap">
+      <div class="kicker rv">TEAM & COMMUNITY · 团队与社区</div>
+      <h2 class="rv">真正的 AI 能力，不是在听课中形成，<br>而是在持续实践中被锻造。</h2>
+      <div class="grid g3">
+        <div class="card rv"><div class="ic">研</div><h3>持续研究</h3><p>持续跟踪国内外主流模型、工具与应用趋势，按实际变化更新课程 —— 工具会换代，方法论不频繁推翻。</p></div>
+        <div class="card rv"><div class="ic">实</div><h3>真实业务</h3><p>团队来自创业、经营、技术、内容、电商与教育领域。课程内容来自真实业务，而不是复述公开资料。</p></div>
+        <div class="card rv"><div class="ic">用</div><h3>以用促学</h3><p>核心教学内容经过真实任务、真实学员和真实场景验证 —— 社区不制造焦虑，鼓励作品输出与长期成长。</p></div>
+      </div>
+      <div class="center" style="margin-top:36px"><button class="btn btn-ol rv" onclick="go('community')">了解 FORGE 社区</button></div>
+    </div>
+  </section>
+
+  <!-- S9 ENTERPRISE -->
+  <section class="dark">
+    <div class="wrap">
+      <div class="kicker rv">ENTERPRISE & GOV · 组织服务</div>
+      <h2 class="rv">帮助组织把 AI 从「知道」变成「真正用起来」。</h2>
+      <p class="sub rv">目标不是让所有员工成为技术专家，而是统一认知、明确安全边界、识别高价值场景、沉淀组织资产。</p>
+      <div class="grid g4">
+        <div class="card rv"><div class="ic">通</div><h3>组织 AI 通识培训</h3><p>企业全员 / 管理层 / 园区 / 协会 / 公共组织 —— 认知、边界、工具、安全与规范。</p></div>
+        <div class="card rv"><div class="ic">岗</div><h3>岗位场景训战</h3><p>围绕真实岗位任务进行案例拆解、现场练习与成果输出。</p></div>
+        <div class="card rv"><div class="ic">创</div><h3>AI 应用共创</h3><p>场景识别、流程梳理、知识库与智能体原型、应用试点。技术开发可联合成熟合作伙伴。</p></div>
+        <div class="card rv"><div class="ic">公</div><h3>政府与公共培训</h3><p>区域公益培训、产业人才提升、教师 AI 能力、公共就业技能等项目交付。</p></div>
+      </div>
+      <div class="steps rv">
+        <div class="step"><div class="n">1</div><h4>需求调研</h4><p>行业·岗位·基础·目标</p></div>
+        <div class="step"><div class="n">2</div><h4>场景识别</h4><p>高频·高耗时·可标准化</p></div>
+        <div class="step"><div class="n">3</div><h4>课程设计</h4><p>分层分岗定制内容</p></div>
+        <div class="step"><div class="n">4</div><h4>现场训战</h4><p>真实任务实练</p></div>
+        <div class="step"><div class="n">5</div><h4>成果沉淀</h4><p>提示词·流程·知识资产</p></div>
+        <div class="step"><div class="n">6</div><h4>复盘迭代</h4><p>效果总结·改进方向</p></div>
+      </div>
+      <div class="center" style="margin-top:44px">
+        <button class="btn btn-p rv" onclick="openModal('b')">获取组织 AI 培训方案</button>
+        <button class="btn btn-o rv" style="margin-left:12px" onclick="openModal('b')">预约企业咨询</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="dark2 final">
+    <div class="wrap">
+      <h2 class="rv">不要等待未来，<br>先从今天开始建立自己的 AI 能力。</h2>
+      <p class="sub rv" style="margin:16px auto 36px">无论你是第一次接触 AI，还是希望把 AI 用进工作、经营和组织管理，都可以从适合自己的路径开始。</p>
+      <div class="hero-btns rv">
+        <button class="btn btn-p" onclick="openModal('c')">开始你的 AI 能力建设</button>
+        <button class="btn btn-o" onclick="openModal('lead')">获取 AI 入门指南</button>
+        <button class="btn btn-o" onclick="openModal('b')">咨询企业培训方案</button>
+      </div>
+    </div>
+  </section>
+</div>
+<!-- ================= 学习路径 ================= -->
+<div class="page" id="page-path">
+  <section class="dark" style="padding-top:150px">
+    <div class="wrap">
+      <div class="kicker">LEARNING PATH · 学习路径</div>
+      <h1 style="font-size:40px">AI 学习不应该从追逐工具开始。</h1>
+      <p class="sub" style="margin-top:16px">真正稳定的 AI 能力，来自正确认知、基本功、真实场景和持续实践。</p>
+    </div>
+  </section>
+  <section class="light">
+    <div class="wrap">
+      <h2 class="rv">五个常见学习误区</h2>
+      <div class="grid g3">
+        <div class="card rv"><div class="ic">✕</div><h3>囤工具</h3><p>收藏大量工具，却没有真正解决过一个问题。</p></div>
+        <div class="card rv"><div class="ic">✕</div><h3>背模板</h3><p>只记提示词模板，不会根据场景调整。</p></div>
+        <div class="card rv"><div class="ic">✕</div><h3>神化 AI</h3><p>认为 AI 什么都能做，忽视错误和边界。</p></div>
+        <div class="card rv"><div class="ic">✕</div><h3>只听不练</h3><p>只听课不练习，没有形成作品和流程。</p></div>
+        <div class="card rv"><div class="ic">✕</div><h3>追新不沉淀</h3><p>不断追逐新工具，没有沉淀自己的方法。</p></div>
+        <div class="card rv" style="border-color:#B9D4FF;background:#F4F8FF"><div class="ic">✓</div><h3>FORGE 的答案</h3><p>正确认知 → 基本功 → 真实场景 → 持续实践 → 作品说话。</p></div>
+      </div>
+    </div>
+  </section>
+  <section class="dark">
+    <div class="wrap">
+      <div class="kicker rv">CORE MODEL</div>
+      <h2 class="rv">FORGE 锻造 · AI时代能力双引擎</h2>
+      <p class="sub rv">九个字：想拆挑 · 场料法 · 真界稳 —— 人管判断，AI 管生成，底盘管验收。</p>
+      <div class="engine-wrap rv">
+        <div class="engines">
+          <div class="engine"><div class="tag">左引擎 · 人类能力</div><div class="big">想 拆 挑</div><div class="exp">创造力 · 体系化能力 · 审美判断</div></div>
+          <div class="engine g"><div class="tag" style="color:var(--green)">右引擎 · AI 能力</div><div class="big">场 料 法</div><div class="exp">场景 · 数据 · 基本功</div></div>
+        </div>
+        <div class="chassis"><span class="pulse"></span><b>真 · 界 · 稳</b><span>安全底盘 —— 是真的吗 · 该它做吗 · 下次还行吗</span></div>
+      </div>
+    </div>
+  </section>
+  <section class="white">
+    <div class="wrap">
+      <h2 class="rv">不同人群的起点</h2>
+      <div class="grid g4">
+        <div class="card rv"><h3>零基础学员</h3><p>从 AI 认知和基本对话开始 —— 先参加 3 小时公开体验课，再进入零基础训战营。</p></div>
+        <div class="card rv"><h3>职场人士</h3><p>从高频重复任务开始 —— 周报、资料整理、汇报表达，先让 AI 接走六成机械劳动。</p></div>
+        <div class="card rv"><h3>创业者</h3><p>从内容、客户和经营场景开始 —— 用最小闭环验证，再逐步搭建工作流。</p></div>
+        <div class="card rv"><h3>企业管理者</h3><p>从组织效率和高价值场景开始 —— 见企业服务页的六步交付路径。</p></div>
+      </div>
+      <div class="center" style="margin-top:40px"><button class="btn btn-p" onclick="openModal('c')">获取我的学习建议</button></div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= 课程体系 ================= -->
+<div class="page" id="page-courses">
+  <section class="dark" style="padding-top:150px">
+    <div class="wrap">
+      <div class="kicker">COURSES · 课程体系</div>
+      <h1 style="font-size:40px">每一门课程，都应该对应一种真实能力。</h1>
+      <p class="sub" style="margin-top:16px">不以工具数量作为价值标准，而以学员能否理解、应用和完成作品作为核心标准。</p>
+    </div>
+  </section>
+  <section class="light">
+    <div class="wrap">
+      <div class="strip rv"><div><h3>🎓 AI 公开体验课 · 3小时 · 低门槛入口</h3><p>认知破局 + 安全防骗 + 现场搭建你的第一个智能体 —— 先体验，再决定。</p></div><button class="btn btn-p" onclick="openModal('c')">预约体验课</button></div>
+      <div class="grid g3">
+        <div class="card rv"><div class="ic">L1</div><h3>零基础训战营</h3><p><b>适合：</b>第一次系统学习 AI 的人。<br><b>内容：</b>AI 认知 · 提示词基本功 · 工具全景 · 图文多模态 · 场景拆解 · 真实任务练习。<br><b>结果：</b>建立正确学习框架，完成第一批真实作品。<br><b>形式：</b>两天两夜线下集训。</p><span class="link" onclick="openModal('c')">咨询开课安排</span></div>
+        <div class="card rv"><div class="ic">L2</div><h3>AI 场景应用进阶</h3><p><b>适合：</b>已具备基础使用能力的人。<br><b>内容：</b>办公提效 · 内容营销 · 电商应用 · 个人品牌 · 数据分析 · 行业共创。<br><b>结果：</b>把 AI 嵌入自己的真实工作流程。</p><span class="link" onclick="openModal('c')">咨询开课安排</span></div>
+        <div class="card rv"><div class="ic">L3</div><h3>工作流与智能体实践</h3><p><b>适合：</b>有明确任务与业务需求的人。<br><b>内容：</b>提示词资产 · 知识库 · 智能体 · 工作流设计 · 自动化 · 项目原型。<br><b>结果：</b>将零散工具整合成可复用的解决方案。</p><span class="link" onclick="openModal('c')">咨询开课安排</span></div>
+      </div>
+      <h2 class="rv" style="margin-top:70px">学员五大权益</h2>
+      <div class="rights rv">
+        <span class="right-tag">① 线下训战营 · 两天两夜实战集训</span>
+        <span class="right-tag">② 全年线上实时交互课 · 跟上每次迭代</span>
+        <span class="right-tag">③ 主流大模型学习权限（以当期服务为准）</span>
+        <span class="right-tag">④ 社群陪跑一年 · 答疑 + 每周分享</span>
+        <span class="right-tag">⑤ 学员专属硬件权益</span>
+        <span class="right-tag" style="border-color:#B9E6D0;background:#EFFBF5;color:#1D7A55">线下开营 7 天内不满意可退（以协议为准）</span>
+      </div>
+      <p class="verify rv">所有权益按实际可稳定交付的内容上线，不提前承诺无法长期维持的服务。</p>
+    </div>
+  </section>
+</div>
+
+<!-- ================= 学员成果 ================= -->
+<div class="page" id="page-outcomes">
+  <section class="dark" style="padding-top:150px">
+    <div class="wrap">
+      <div class="kicker">OUTCOMES · 学员成果</div>
+      <h1 style="font-size:40px">每一个作品，都是能力成长的证明。</h1>
+      <p class="sub" style="margin-top:16px">学习 AI 的意义，不是记住多少工具名称，而是能够用它解决过去解决不了的问题。</p>
+    </div>
+  </section>
+  <section class="light">
+    <div class="wrap">
+      <div class="kb-cat rv"><button class="on">全部</button><button>办公提效</button><button>内容创作</button><button>电商营销</button><button>教育家庭</button><button>智能体</button><button>工作流</button><button>企业应用</button></div>
+      <div class="grid g3">
+        <div class="card case rv"><div class="meta"><span>HR 经理</span><span>办公提效</span></div><h3>招聘流程提效</h3><p>岗位 JD 起草与简历初筛由 AI 辅助完成，本人专注面试引导与人才培养。</p><div class="quote">“我有个新助理——不用付工资的那种。”</div></div>
+        <div class="card case rv"><div class="meta"><span>市场文案</span><span>内容创作</span></div><h3>从执行者到导演</h3><p>系统学习后一人承担三人产出：AI 打底稿，本人调教、判断、终审。</p><div class="quote">“判断力和品味，AI 替代不了。”</div></div>
+        <div class="card case rv"><div class="meta"><span>宝妈</span><span>教育家庭</span></div><h3>作业辅导智能体</h3><p>“讲步骤、不给答案”的家庭助教，配合隐私保护习惯使用。</p><div class="quote">“孩子说：妈妈我懂了。”</div></div>
+        <div class="card case rv"><div class="meta"><span>退休教师</span><span>内容创作</span></div><h3>四十年心得成书</h3><p>口述+AI 整理结构与章节，三个月完成人生第一本书。</p><div class="quote">“原来我一直有东西要说，只是不知道怎么说出来。”</div></div>
+        <div class="card case rv"><div class="meta"><span>小微企业主</span><span>电商营销</span></div><h3>内容自产 + 获客</h3><p>自建文案生产流程，节省的外包预算转投获客渠道。</p><div class="quote">“一个人的体力，三个人的产出。”</div></div>
+        <div class="card case rv"><div class="meta"><span>区域医院</span><span>企业应用</span></div><h3>随访辅助智能体</h3><p>常规回访由智能体承担，护士专注复杂病例。红线：一次投诉即失败。</p><div class="quote">“下限可控，是医疗场景的第一原则。”</div></div>
+      </div>
+      <p class="verify rv">案例声明：均为<b>真实学员 · 真实作品 · 本人授权</b>；效果因个人基础、投入时间与行业条件而异，FORGE AI 不承诺统一结果，不使用虚构案例。</p>
+    </div>
+  </section>
+</div>
+
+<!-- ================= 社区 ================= -->
+<div class="page" id="page-community">
+  <section class="dark" style="padding-top:150px">
+    <div class="wrap">
+      <div class="kicker">COMMUNITY · FORGE 社区</div>
+      <h1 style="font-size:40px">AI 学习不是一次课程，<br>而是一段持续进化的过程。</h1>
+      <p class="sub" style="margin-top:16px">工具会变化，问题会变化，工作也会变化。一个稳定、真实、有实践氛围的学习网络，帮助每个人走得更远。</p>
+    </div>
+  </section>
+  <section class="light">
+    <div class="wrap">
+      <h2 class="rv">社区提供什么</h2>
+      <div class="grid g3">
+        <div class="card rv"><div class="ic">更</div><h3>持续更新</h3><p>重要工具与方法变化提醒，课程复训与内容更新。</p></div>
+        <div class="card rv"><div class="ic">评</div><h3>实践反馈</h3><p>展示作品，获得点评、建议和改进方向。</p></div>
+        <div class="card rv"><div class="ic">流</div><h3>同行交流</h3><p>与不同行业的学习者分享真实经验，跨界知识嫁接。</p></div>
+        <div class="card rv"><div class="ic">创</div><h3>项目共创</h3><p>参与案例、内容、课程和项目共建。</p></div>
+        <div class="card rv"><div class="ic">展</div><h3>优秀展示</h3><p>优秀学员和作品有机会进入官网案例库。</p></div>
+        <div class="card rv" style="border-color:#F3D2D2;background:#FDF7F7"><div class="ic" style="background:#FBEAEA;color:#C0504E">戒</div><h3>社区不做什么</h3><p>不制造焦虑 · 不鼓励投机变现 · 不传播未经验证的消息 · 不把群聊数量当服务质量。</p></div>
+      </div>
+      <div class="center" style="margin-top:40px"><button class="btn btn-p" onclick="openModal('c')">申请加入社区</button></div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= 企业服务 ================= -->
+<div class="page" id="page-enterprise">
+  <section class="dark" style="padding-top:150px">
+    <div class="wrap">
+      <div class="kicker">ENTERPRISE · 企业服务</div>
+      <h1 style="font-size:40px">面向真实业务的组织 AI 能力建设。</h1>
+      <p class="sub" style="margin-top:16px">从统一认知，到岗位应用，再到项目共创 —— 帮助组织建立适合自身业务的 AI 使用方式。</p>
+    </div>
+  </section>
+  <section class="light">
+    <div class="wrap">
+      <h2 class="rv">组织面临的真实问题</h2>
+      <div class="grid g3">
+        <div class="card rv"><p>员工各自使用，<b>缺少统一规范</b>；工具很多，却没形成工作流程。</p></div>
+        <div class="card rv"><p>管理层重视，但<b>找不到落地场景</b>；培训结束后没有持续应用。</p></div>
+        <div class="card rv"><p><b>担心数据安全</b>与信息泄露；缺少可衡量的成果和验收标准。</p></div>
+      </div>
+      <h2 class="rv" style="margin-top:70px">服务模块</h2>
+      <div class="grid g3">
+        <div class="card rv"><div class="ic">管</div><h3>管理层 AI 认知课</h3><p>趋势、边界、组织影响与落地路径。</p></div>
+        <div class="card rv"><div class="ic">全</div><h3>全员 AI 通识课</h3><p>统一认知与基础能力，含安全与使用规范。</p></div>
+        <div class="card rv"><div class="ic">岗</div><h3>部门场景训战</h3><p>行政 / 人力 / 市场 / 销售 / 内容 / 客服 —— 围绕真实岗位任务实练。</p></div>
+        <div class="card rv"><div class="ic">坊</div><h3>AI 应用工作坊</h3><p>共创方式识别和验证高价值应用场景。</p></div>
+        <div class="card rv"><div class="ic">资</div><h3>知识资产建设</h3><p>沉淀提示词、案例、流程和岗位方法。</p></div>
+        <div class="card rv"><div class="ic">项</div><h3>项目制培训交付</h3><p>支持政府公益培训、产业人才提升等大规模项目的组织与执行。</p></div>
+      </div>
+    </div>
+  </section>
+  <section class="dark">
+    <div class="wrap">
+      <h2 class="rv">六步交付路径</h2>
+      <div class="steps rv">
+        <div class="step"><div class="n">1</div><h4>需求调研</h4><p>行业·岗位·基础·目标</p></div>
+        <div class="step"><div class="n">2</div><h4>场景识别</h4><p>高频·高耗时·可标准化</p></div>
+        <div class="step"><div class="n">3</div><h4>课程设计</h4><p>分层分岗定制</p></div>
+        <div class="step"><div class="n">4</div><h4>现场训战</h4><p>真实任务实练</p></div>
+        <div class="step"><div class="n">5</div><h4>成果沉淀</h4><p>提示词·流程·资产</p></div>
+        <div class="step"><div class="n">6</div><h4>复盘迭代</h4><p>效果总结·改进</p></div>
+      </div>
+      <h2 class="rv" style="margin-top:70px">安全与合规</h2>
+      <div class="grid g2">
+        <div class="card rv"><p>✓ 不向公共模型上传敏感信息　✓ 遵守组织内部信息管理制度　✓ 个人信息与商业数据脱敏　✓ AI 结果需人工复核</p></div>
+        <div class="card rv"><p>✓ 明确不同工具的使用边界　✓ 提供培训使用规范建议　✓ 私有化部署与系统开发可联合成熟技术合作伙伴完成</p></div>
+      </div>
+      <div class="center" style="margin-top:44px"><button class="btn btn-p" onclick="openModal('b')">获取组织 AI 培训方案</button></div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= 知识库 ================= -->
+<div class="page" id="page-kb">
+  <section class="dark" style="padding-top:150px">
+    <div class="wrap">
+      <div class="kicker">KNOWLEDGE · AI 知识库</div>
+      <h1 style="font-size:40px">让 AI 知识更清晰、更实用，也更值得信任。</h1>
+      <p class="sub" style="margin-top:16px">持续整理适合中文零基础学习者和企业用户的 AI 方法、工具、案例与安全指南。</p>
+    </div>
+  </section>
+  <section class="white">
+    <div class="wrap">
+      <div class="kb-cat rv"><button class="on">全部</button><button>AI 入门</button><button>工具指南</button><button>提示词方法</button><button>场景案例</button><button>工作流与智能体</button><button>AI 安全与判断</button><button>企业实践</button></div>
+      <div class="rv">
+        <div class="kb-item"><div><h4>什么是大模型？用「猜下一个词」讲穿它</h4><p>AI 入门 · 从第一性原理理解大模型，不神化也不轻视</p></div><span>2026-07</span></div>
+        <div class="kb-item"><div><h4>AI 会「一本正经地胡说」：幻觉是什么，怎么防</h4><p>AI 安全与判断 · 关键事实必须核对的科学原因</p></div><span>2026-07</span></div>
+        <div class="kb-item"><div><h4>防 AI 换脸诈骗三招：转账必核实 · 家庭暗号 · 官方渠道</h4><p>AI 安全与判断 · 请转发给家里老人</p></div><span>2026-07</span></div>
+        <div class="kb-item"><div><h4>写好提示词的四件事：身份 · 任务 · 背景 · 格式</h4><p>提示词方法 · 你说清楚一点，它就好用一点</p></div><span>2026-06</span></div>
+        <div class="kb-item"><div><h4>选场景三筛法：高频 · 高痛 · 可标准化</h4><p>场景案例 · 为什么你用了 AI 却没用起来</p></div><span>2026-06</span></div>
+        <div class="kb-item"><div><h4>什么是智能体？把好 Prompt「存」成随叫随到的助手</h4><p>工作流与智能体 · 对话会散场，助手留身边</p></div><span>2026-06</span></div>
+        <div class="kb-item"><div><h4>给孩子用 AI 的两条家规：当老师不当枪手 · 拍照去信息</h4><p>场景案例 · 家庭学习的正确姿势</p></div><span>2026-05</span></div>
+        <div class="kb-item"><div><h4>企业 AI 落地第一步：不是买账号，是识别高价值场景</h4><p>企业实践 · 六步交付路径详解</p></div><span>2026-05</span></div>
+      </div>
+      <p class="verify rv">内容原则：回答真实问题 · 有明确场景 · 有风险提醒 · 标明发布与更新时间 · 过时内容及时修订</p>
+    </div>
+  </section>
+</div>
+
+<!-- ================= 关于我们 ================= -->
+<div class="page" id="page-about">
+  <section class="dark" style="padding-top:150px">
+    <div class="wrap">
+      <div class="kicker">ABOUT · 关于我们</div>
+      <h1 style="font-size:40px">我们希望帮助更多人，<br>跨过 AI 使用的第一道门槛。</h1>
+    </div>
+  </section>
+  <section class="light">
+    <div class="wrap" style="max-width:820px">
+      <h2 class="rv">品牌故事</h2>
+      <p class="rv" style="color:var(--tx-l-sub);margin-top:14px">AI 的变化速度很快。越来越多人知道 AI 很重要，却不知道从哪里开始，也不知道如何把它真正用进自己的工作和生活。FORGE AI 因此而生。</p>
+      <p class="rv" style="color:var(--tx-l-sub);margin-top:14px">我们不希望把 AI 包装成遥不可及的技术，也不希望把它描述成万能工具。我们更愿意做一件长期而具体的事：帮助不同基础、不同行业的人，建立正确认知，掌握使用方法，完成真实作品，并逐渐形成属于自己的 AI 能力系统。</p>
+      <h2 class="rv" style="margin-top:60px">我们相信</h2>
+      <div class="grid g3" style="margin-top:30px">
+        <div class="card rv"><p><b>普通人也可以学会 AI</b><br>年龄、行业、学历都不是门槛。</p></div>
+        <div class="card rv"><p><b>工具不是最终目的</b><br>人的判断依然重要。</p></div>
+        <div class="card rv"><p><b>作品比口号更有力量</b><br>长期实践比短期焦虑更有价值。</p></div>
+      </div>
+      <h2 class="rv" style="margin-top:60px">品牌原则</h2>
+      <p class="rv" style="font-size:22px;font-weight:700;margin-top:14px;color:var(--blue)">真实场景，系统学习，持续实践，作品说话。</p>
+      <p class="rv" style="color:var(--tx-l-sub);margin-top:20px">团队来自创业、企业经营、技术、内容、电商、设计和教育等不同领域，持续研究 AI，也持续把 AI 用进真实业务。【团队成员详细介绍占位：以真实可证明的经历为准】</p>
+      <div class="center" style="margin-top:44px"><button class="btn btn-p rv" onclick="openModal('c')">预约学习咨询</button></div>
+    </div>
+  </section>
+</div>
+<!--PAGES-->
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div style="max-width:300px">
+        <div class="logo" style="margin-bottom:14px"><b>FORGE <i>AI</i></b><span>锻造AI训战营</span></div>
+        <p>面向个人与组织的 AI 能力建设平台。<br>真实场景，系统学习，持续实践，作品说话。</p>
+      </div>
+      <div class="cols">
+        <div><h5>学习</h5><a onclick="go('path')">学习路径</a><a onclick="go('courses')">课程体系</a><a onclick="go('kb')">AI 知识库</a></div>
+        <div><h5>成果</h5><a onclick="go('outcomes')">学员作品</a><a onclick="go('community')">FORGE 社区</a></div>
+        <div><h5>组织</h5><a onclick="go('enterprise')">企业服务</a><a onclick="openModal('b')">政企咨询</a></div>
+        <div><h5>关于</h5><a onclick="go('about')">关于我们</a><a onclick="alert('演示原型：隐私政策页占位')">隐私政策</a></div>
+      </div>
+    </div>
+    <div class="foot-note">
+      <span>© 2026 FORGE AI · 锻造AI训战营 【备案号占位】</span>
+      <span>支持企业开票 · 支持团队定制 · 线下与线上交付 · 课程持续更新</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= MODALS ================= -->
+<div class="modal-bg" id="mC" onclick="if(event.target===this)closeModal('mC')">
+  <div class="modal"><button class="x" onclick="closeModal('mC')">✕</button>
+    <div class="f">
+      <h3>先找到适合你的 AI 学习起点。</h3>
+      <p class="mp">填写简单信息，我们将根据你的行业、基础和目标，为你提供适合的学习建议和近期课程安排。</p>
+      <input placeholder="姓名或称呼"><input placeholder="所在城市">
+      <select><option>当前 AI 基础</option><option>从未用过</option><option>偶尔使用</option><option>经常使用</option></select>
+      <input placeholder="最想解决的问题"><input placeholder="微信或手机号">
+      <button class="btn btn-p" style="width:100%" onclick="submitOk(this)">提交并获取学习建议</button>
+    </div>
+    <div class="ok"><div class="tick">✓</div><h3>已收到！</h3><p class="mp">课程顾问将在 1 个工作日内联系你。<br>【此处展示企业微信二维码】</p></div>
+  </div>
+</div>
+<div class="modal-bg" id="mLead" onclick="if(event.target===this)closeModal('mLead')">
+  <div class="modal"><button class="x" onclick="closeModal('mLead')">✕</button>
+    <div class="f">
+      <h3>领取《AI 零基础学习地图》</h3>
+      <p class="mp">帮你了解：AI 应该从哪里开始 · 零基础需要掌握哪些能力 · 常见学习误区 · 不同阶段的学习路径。</p>
+      <input placeholder="称呼"><input placeholder="微信 / 手机号 / 邮箱">
+      <button class="btn btn-p" style="width:100%" onclick="submitOk(this)">免费领取</button>
+    </div>
+    <div class="ok"><div class="tick">✓</div><h3>领取成功！</h3><p class="mp">学习地图将通过你留下的方式发送。<br>【此处展示公众号二维码】</p></div>
+  </div>
+</div>
+<div class="modal-bg" id="mB" onclick="if(event.target===this)closeModal('mB')">
+  <div class="modal"><button class="x" onclick="closeModal('mB')">✕</button>
+    <div class="f">
+      <h3>获取组织 AI 培训方案</h3>
+      <p class="mp">请留下单位基本情况和培训需求，我们将根据人员基础、岗位场景和项目目标，提供初步建议。</p>
+      <input placeholder="单位名称"><input placeholder="联系人 / 职务"><input placeholder="联系方式">
+      <select><option>预计培训人数</option><option>30人以内</option><option>30–100人</option><option>100人以上</option></select>
+      <textarea rows="2" placeholder="希望解决的问题 / 其他需求"></textarea>
+      <button class="btn btn-p" style="width:100%" onclick="submitOk(this)">提交企业需求</button>
+    </div>
+    <div class="ok"><div class="tick">✓</div><h3>已收到需求！</h3><p class="mp">企业顾问将在 1 个工作日内与你联系。<br>【企业邮箱 / 企业微信占位】</p></div>
+  </div>
+</div>
+
+<script>
+/* ---------- router ---------- */
+function go(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('show'));
+  const el=document.getElementById('page-'+p); if(el){el.classList.add('show')}
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.toggle('on',a.dataset.p===p));
+  document.getElementById('mMenu').style.display='none';
+  window.scrollTo({top:0});
+  requestAnimationFrame(()=>requestAnimationFrame(reveal));
+}
+function toggleMenu(){const m=document.getElementById('mMenu');m.style.display=m.style.display==='block'?'none':'block'}
+/* ---------- modal ---------- */
+const mid={c:'mC',lead:'mLead',b:'mB'};
+function openModal(k){const m=document.getElementById(mid[k]);m.classList.add('open');m.querySelector('.f').style.display='block';m.querySelector('.ok').style.display='none'}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+function submitOk(btn){const m=btn.closest('.modal');m.querySelector('.f').style.display='none';m.querySelector('.ok').style.display='block'}
+/* ---------- reveal ---------- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+function reveal(){document.querySelectorAll('.page.show .rv:not(.in)').forEach(el=>io.observe(el))}
+reveal();
+</script>
+</body>
+</html>
